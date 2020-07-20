@@ -22,10 +22,23 @@ public class EventService {
 
     @Transactional(readOnly = true)
     public List<Event> findAllEvents(){
-        List<Event> events = new ArrayList<Event>();
+        List<Event> events = new ArrayList<>();
         eventRepository.findAll().forEach(event -> events.add(event));
         return events;
     }
+
+    /* Example. To Be ued in reference and deleted
+    @Transactional(readOnly = true)
+    public List<Event> findAllEventsByUser(Integer id){
+        List<Event> events = new ArrayList<Event>();
+        eventRepository.findAll().forEach(event -> {
+            if (event.getEventOrganiser().getUserId().equals(id)){
+                events.add(event);
+            }
+        });
+        return events;
+    }
+    */
 
     public void saveEvent(Event event){
         eventRepository.save(event);

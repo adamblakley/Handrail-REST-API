@@ -2,8 +2,10 @@ package com.orienteering.rest.demo.controller;
 
 import com.orienteering.rest.demo.Event;
 import com.orienteering.rest.demo.ParticipantControlPerformance;
+import com.orienteering.rest.demo.User;
 import com.orienteering.rest.demo.dto.EventDTO;
 import com.orienteering.rest.demo.service.EventService;
+import com.orienteering.rest.demo.service.UserService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -17,6 +19,9 @@ public class EventResource {
 
     @Autowired
     EventService eventService;
+
+    @Autowired
+    UserService userService;
 
     @Autowired
     ModelMapper modelMapper;
@@ -35,6 +40,13 @@ public class EventResource {
         return convertToDto(event);
     }
 
+    @GetMapping("/users/{id}/events")
+    public List<EventDTO> retrieveEventsByUser(@PathVariable Integer id){
+        User user = userService.findUser(id);
+        List<Event> events = user.getEvents();
+        return events.stream().map(this::convertToDto).collect(Collectors.toList());
+    }
+
     @PostMapping("/events")
     public Integer createEvent(@Valid @RequestBody EventDTO eventDto){
         Event event = convertToEntity(eventDto);
@@ -44,14 +56,12 @@ public class EventResource {
     }
 
     private Event convertToEntity(EventDTO eventDto){
-        Event event = modelMapper.map(eventDto, Event.class);
-        return event;
+        return modelMapper.map(eventDto, Event.class);
     }
 
 
     public EventDTO convertToDto(Event event){
-        EventDTO eventDto = modelMapper.map(event,EventDTO.class);
-        return eventDto;
+        return modelMapper.map(event,EventDTO.class);
     }
 
 }
