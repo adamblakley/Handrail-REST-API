@@ -3,8 +3,9 @@ INSERT INTO User (user_id,user_bio,user_created,user_dob,user_email,user_first_n
 (2,'bio2','2020-06-19 15:27:28.054','2020-06-19 15:27:28.054', '2@2','2','22','pass2',2),
 (3,'testbio','2020-06-19 15:27:28.054','2020-06-19 15:27:28.054', 'test@test','test','testing','testpass',1);
 
-INSERT INTO Course (course_id, course_name, course_date) VALUES
-(1,'My First Course', '2020-06-19 15:27:28.054');
+INSERT INTO Course (course_id, course_name, course_date, USER_ID) VALUES
+(1,'My First Course', '2020-06-19 15:27:28.054',1),
+(2,'My Second Course', '2020-06-19 15:27:28.054',3);
 
 INSERT INTO Control (CONTROL_ID, CONTROL_POSITION, CONTROL_ALTITUDE, CONTROL_COMPLETED, CONTROL_LATITUDE, CONTROL_LONGITUDE, CONTROL_NAME, CONTROL_NOTE,
 CONTROL_COURSE_COURSE_ID) VALUES

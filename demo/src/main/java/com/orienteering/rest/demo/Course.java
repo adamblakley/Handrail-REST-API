@@ -25,6 +25,9 @@ public class Course {
     @OneToMany(mappedBy = "controlCourse", cascade = CascadeType.ALL)
     private List<Control> courseControls;
 
+    @ManyToOne
+    @JoinColumn(name="user_id")
+    private User courseUser;
 
     public Course(){
         super();
@@ -70,12 +73,22 @@ public class Course {
         this.courseControls = courseControls;
     }
 
+    public User getCourseUser() {
+        return courseUser;
+    }
+
+    public void setCourseUser(User courseUser) {
+        this.courseUser = courseUser;
+    }
 
     @Override
     public String toString() {
         return "Course{" +
                 "courseId=" + courseId +
+                ", courseName='" + courseName + '\'' +
+                ", courseDate=" + courseDate +
                 ", courseControls=" + courseControls +
+                ", courseUser=" + courseUser +
                 '}';
     }
 }

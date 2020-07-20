@@ -37,6 +37,9 @@ public class User {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "participantUser", cascade = CascadeType.ALL)
     private List<Participant> participants;
 
+    @OneToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL,mappedBy = "courseUser")
+    private List<Course> courses;
+
     public User(){
         super();
     }
@@ -127,6 +130,14 @@ public class User {
 
     public void setParticipants(List<Participant> participants) {
         this.participants = participants;
+    }
+
+    public List<Course> getCourses() {
+        return courses;
+    }
+
+    public void setCourses(List<Course> courses) {
+        this.courses = courses;
     }
 
     @Override
