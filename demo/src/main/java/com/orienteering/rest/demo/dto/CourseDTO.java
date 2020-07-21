@@ -1,6 +1,8 @@
 package com.orienteering.rest.demo.dto;
 
 
+import com.orienteering.rest.demo.User;
+
 import java.util.Date;
 import java.util.List;
 
@@ -14,10 +16,9 @@ public class CourseDTO {
 
     private List<ControlDTO> courseControls;
 
+    private UserDTO user;
 
-    public CourseDTO(){
-        super();
-    }
+    public CourseDTO(){ }
 
     public Integer getCourseId() {
         return courseId;
@@ -51,11 +52,22 @@ public class CourseDTO {
         this.courseControls = courseControls;
     }
 
+    public UserDTO getUser() {
+        return user;
+    }
+
+    public void setUser(UserDTO user) {
+        this.user = user;
+    }
+
     @Override
     public String toString() {
-        return "Course{" +
+        return "CourseDTO{" +
                 "courseId=" + courseId +
+                ", courseName='" + courseName + '\'' +
+                ", courseDate=" + courseDate +
                 ", courseControls=" + courseControls +
+                ", user=" + user +
                 '}';
     }
 }

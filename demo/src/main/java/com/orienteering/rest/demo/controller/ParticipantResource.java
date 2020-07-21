@@ -41,7 +41,17 @@ public class ParticipantResource {
 
         Event event = eventService.findEvent(id);
 
-        List<Participant> participants = event.getParticipants();
+        Comparator<Participant> participantComparator = new Comparator<Participant>() {
+            @Override
+            public int compare(Participant a, Participant b) {
+                Long aTime = a.totalPerformanceTime();
+                Long bTime = b.totalPerformanceTime();
+                return aTime.compareTo(bTime) ;
+            }
+        };
+
+        ArrayList<Participant> participants = new ArrayList<Participant>(event.getParticipants());
+        Collections.sort(participants,participantComparator);
         return participants.stream().map(this::convertToDto).collect(Collectors.toList());
     }
 
@@ -59,13 +69,11 @@ public class ParticipantResource {
             }
         };
 
-        ArrayList<Participant> participants = (ArrayList) event.getParticipants();
-
+        ArrayList<Participant> participants = new ArrayList<Participant>(event.getParticipants());
         Collections.sort(participants, participantComparator);
+        ArrayList<Participant> topParticipants = (ArrayList<Participant>)participants.subList(0,5);
 
-        ArrayList<Participant> topParticipants = (ArrayList)participants.subList(0,5);
-
-        return participants.stream().map(this::convertToDto).collect(Collectors.toList());
+        return topParticipants.stream().map(this::convertToDto).collect(Collectors.toList());
     }
 
     @GetMapping("/participants/{id}")
@@ -80,13 +88,10 @@ public class ParticipantResource {
         Event event = eventService.findEvent(id);
 
         Participant participantToSave = convertToEntity(participantDTO);
-
         participantToSave.setParticipantEvent(event);
-
         event.addParticipant(participantToSave);
 
         participantService.saveParticipant(participantToSave);
-
         eventService.saveEvent(event);
 
         return participantDTO.getParticipantId();
@@ -94,18 +99,11 @@ public class ParticipantResource {
 
 
     public ParticipantDTO convertToDto(Participant participant){
-        ParticipantDTO participantDto = modelMapper.map(participant,ParticipantDTO.class);
-        return participantDto;
+        return modelMapper.map(participant,ParticipantDTO.class);
     }
 
     private Participant convertToEntity(ParticipantDTO participantDto){
-        Participant participant = modelMapper.map(participantDto, Participant.class);
-        return participant;
+        return modelMapper.map(participantDto, Participant.class);
     }
 
-
-    private Control convertToEntity(ControlDTO controlDto){
-        Control control = modelMapper.map(controlDto, Control.class);
-        return control;
-    }
 }

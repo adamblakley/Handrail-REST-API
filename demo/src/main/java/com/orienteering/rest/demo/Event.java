@@ -37,7 +37,6 @@ public class Event {
         super();
     }
 
-
     public Integer getEventID() {
         return eventID;
     }
