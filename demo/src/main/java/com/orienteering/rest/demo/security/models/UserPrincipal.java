@@ -48,8 +48,8 @@ public class UserPrincipal implements UserDetails {
      * @return
      */
     public static UserPrincipal create(User user){
-        List<GrantedAuthority> authorities = user.getRoles().stream().map(role ->
-                new SimpleGrantedAuthority(role.getName().name())
+        List<GrantedAuthority> authorities = user.getUserRoles().stream().map(role ->
+                new SimpleGrantedAuthority(role.getERole().name())
         ).collect(Collectors.toList());
 
         return new UserPrincipal(
@@ -57,15 +57,6 @@ public class UserPrincipal implements UserDetails {
         );
     }
 
-    public static UserPrincipal create(User user){
-        List<GrantedAuthority> authorities = user.getRoles().stream().map(role ->
-                new SimpleGrantedAuthority(role.getName().name())
-        ).collect(Collectors.toList());
-
-        return new UserPrincipal(
-                user.getUserId(),user.getUserEmail(),user.getUserPassword(),authorities
-        );
-    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

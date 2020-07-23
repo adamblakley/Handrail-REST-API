@@ -3,7 +3,9 @@ package com.orienteering.rest.demo;
 import javax.persistence.*;
 import javax.validation.constraints.Past;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 public class User {
@@ -40,8 +42,32 @@ public class User {
     @OneToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL,mappedBy = "courseUser")
     private List<Course> courses;
 
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinColumn(name = "role_id")
+    private Set<Role> userRoles = new HashSet<>();
+
+    /**
+     * default constructor
+     */
     public User(){
-        super();
+    }
+
+    /**
+     * constructor with args
+     * @param userEmail
+     * @param userPassword
+     * @param userFirstName
+     * @param userLastName
+     * @param userDob
+     * @param userBio
+     */
+    public User(String userEmail, String userPassword, String userFirstName, String userLastName, @Past Date userDob, String userBio) {
+        this.userFirstName = userFirstName;
+        this.userLastName = userLastName;
+        this.userEmail = userEmail;
+        this.userPassword = userPassword;
+        this.userDob = userDob;
+        this.userBio = userBio;
     }
 
     public List<Event> getEvents() {
@@ -138,6 +164,14 @@ public class User {
 
     public void setCourses(List<Course> courses) {
         this.courses = courses;
+    }
+
+    public Set<Role> getUserRoles() {
+        return userRoles;
+    }
+
+    public void setUserRoles(Set<Role> userRoles) {
+        this.userRoles = userRoles;
     }
 
     @Override

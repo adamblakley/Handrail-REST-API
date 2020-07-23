@@ -1,3 +1,7 @@
+INSERT INTO ROLE (role_id, role) VALUES
+(1,'ROLE_ADMIN'),
+(2,'ROLE_USER');
+
 INSERT INTO User (user_id,user_bio,user_created,user_dob,user_email,user_first_name,user_last_name,user_password,user_type) VALUES
 (1,'bio1','2020-06-19 15:27:28.054','2020-06-19 15:27:28.054', '1@1','1','11','pass1',1),
 (2,'bio2','2020-06-19 15:27:28.054','2020-06-19 15:27:28.054', '2@2','jimmy2','22','pass2',2),

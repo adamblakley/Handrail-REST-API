@@ -10,8 +10,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Optional;
-
 /***
  * Service for user details UserPrincipal
  */
@@ -34,7 +32,7 @@ public class CustomUserDetailsService implements UserDetailsService {
     @Transactional
     public UserDetails loadUserByUsername(String userEmail) throws UsernameNotFoundException {
         try{
-            User user = userRepository.findByEmail(userEmail);
+            User user = userRepository.findByUserEmail(userEmail);
             return UserPrincipal.create(user);
         } catch (UsernameNotFoundException u){
             throw new UsernameNotFoundException("User not found with email : "+userEmail);
@@ -45,10 +43,11 @@ public class CustomUserDetailsService implements UserDetailsService {
      * Access user by id
      * @param userId
      * @return
+     * @throws UsernameNotFoundException
      */
-    public UserDetails loadUserById(Integer userId){
+    public UserDetails loadUserById(Integer userId) throws UsernameNotFoundException{
         try{
-            Optional<User> user = userRepository.findById(userId);
+            User user = userRepository.findById(userId).get();
             return UserPrincipal.create(user);
         } catch( UsernameNotFoundException u){
             throw new UsernameNotFoundException("User not found with id : "+userId);

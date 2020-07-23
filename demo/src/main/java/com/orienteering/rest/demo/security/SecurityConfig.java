@@ -1,5 +1,6 @@
 package com.orienteering.rest.demo.security;
 
+import com.orienteering.rest.demo.security.services.CustomUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -13,6 +14,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 /***
  * Provide security configuration with Spring Security
@@ -40,7 +42,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
      */
     @Bean
     public JwtAuthenticationFilter jwtAuthenticationFilter(){
-        return new JwtAuthenticationFilter;
+        return new JwtAuthenticationFilter();
     }
 
     /***
@@ -52,12 +54,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return new BCryptPasswordEncoder();
     }
 
-    /***
-     * interface for authenticating user
-     * @param authenticationManagerBuilder
-     * @throws Exception
-     */
-    @Bean(BeanIds.AUTHENTICATION_MANAGER)
 
 
     /***
@@ -70,14 +66,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     /***
-     * reate authentication provider
+     * create authentication provider
      * @return
      * @throws Exception
      */
+    @Bean(BeanIds.AUTHENTICATION_MANAGER)
     @Override
     public AuthenticationManager authenticationManagerBean() throws Exception{
         return super.authenticationManagerBean();
     }
+
 
 
     /***
@@ -101,7 +99,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                     .antMatchers("/")
                         .permitAll()
-                    .antMatchers("/auth/**")
+                    .antMatchers("/authentication/**")
+                        .permitAll()
+                    .antMatchers("/h2-console/**")
                         .permitAll()
                     .antMatchers("/user/checkUserNameAvailability","/user/checkEmailAvailability")
                         .permitAll()
@@ -109,6 +109,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         .authenticated();
 
         // add JWT Security Filter
-        http.addFilterBefore(jwtAuthenticationFilter(),UserNamePasswordAuthenticationFilter.class);
+        http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
     }
 }
