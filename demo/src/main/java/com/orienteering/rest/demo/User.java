@@ -1,5 +1,7 @@
 package com.orienteering.rest.demo;
 
+import org.hibernate.annotations.NaturalId;
+
 import javax.persistence.*;
 import javax.validation.constraints.Past;
 import java.util.Date;
@@ -61,7 +63,7 @@ public class User {
      * @param userDob
      * @param userBio
      */
-    public User(String userEmail, String userPassword, String userFirstName, String userLastName, @Past Date userDob, String userBio) {
+    public User(String userFirstName,String userLastName, String userEmail, String userPassword, @Past Date userDob, String userBio) {
         this.userFirstName = userFirstName;
         this.userLastName = userLastName;
         this.userEmail = userEmail;

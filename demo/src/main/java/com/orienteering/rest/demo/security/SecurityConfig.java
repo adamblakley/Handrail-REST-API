@@ -54,14 +54,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return new BCryptPasswordEncoder();
     }
 
-
-
     /***
      * configure authentication provider
      * @throws Exception
      */
     @Override
     public void configure(AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception{
+
         authenticationManagerBuilder.userDetailsService(customUserDetailsService).passwordEncoder(passwordEncoder());
     }
 
@@ -99,6 +98,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                     .antMatchers("/")
                         .permitAll()
+                    .antMatchers("/error")
+                        .permitAll()
                     .antMatchers("/authentication/**")
                         .permitAll()
                     .antMatchers("/h2-console/**")
@@ -107,6 +108,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         .permitAll()
                     .anyRequest()
                         .authenticated();
+
+        http
+                .headers()
+                .frameOptions()
+                .disable();
 
         // add JWT Security Filter
         http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);

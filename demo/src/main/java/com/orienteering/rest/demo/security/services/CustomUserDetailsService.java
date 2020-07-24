@@ -31,12 +31,10 @@ public class CustomUserDetailsService implements UserDetailsService {
     @Override
     @Transactional
     public UserDetails loadUserByUsername(String userEmail) throws UsernameNotFoundException {
-        try{
-            User user = userRepository.findByUserEmail(userEmail);
+            User user = userRepository.findByUserEmail(userEmail).orElseThrow(()->{
+                return new UsernameNotFoundException("user not found with email: "+userEmail);
+            });
             return UserPrincipal.create(user);
-        } catch (UsernameNotFoundException u){
-            throw new UsernameNotFoundException("User not found with email : "+userEmail);
-        }
     }
 
     /**

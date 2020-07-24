@@ -54,10 +54,9 @@ public class AuthenticationController {
      */
     @PostMapping("/login")
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest){
-        System.out.println(loginRequest.getUsernameOrEmail()+loginRequest.getPassword());
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
-                        loginRequest.getUsernameOrEmail(),
+                        loginRequest.getUserEmail(),
                         loginRequest.getPassword()
                 )
         );
@@ -83,7 +82,6 @@ public class AuthenticationController {
             Role role = roleRepository.findByRole(ERole.ROLE_USER).orElseThrow(()->new AppException("Role not set"));
             user.setUserRoles(Collections.singleton(role));
             User savedUser = userService.saveUser(user);
-
             URI location = ServletUriComponentsBuilder.fromCurrentContextPath().path("/users/{id}").buildAndExpand(savedUser.getUserId()).toUri();
             return ResponseEntity.created(location).body(new APIResponse(true,"User registered"));
         }
