@@ -12,25 +12,8 @@ import java.util.List;
 
 public class UserDTO {
 
-    public UserDTO() {
-        super();
-    }
 
-    public UserDTO(String userEmail, String userPassword, String userFirstName, String userLastName,Date userDob, String userBio, int userType) {
-        super();
-        this.userId = userId;
-        this.userCreated = userCreated;
-        this.userEmail = userEmail;
-        this.userPassword = userPassword;
-        this.userFirstName = userFirstName;
-        this.userLastName = userLastName;
-        this.userDob = userDob;
-        this.userBio = userBio;
-        this.userType = userType;
-    }
-
-
-    private Integer userId;
+    private Long userId;
 
     private Date userCreated;
 
@@ -48,19 +31,35 @@ public class UserDTO {
 
     private int userType;
 
+    private PhotographDTO userPhotograph;
 
-    public Integer getUserId() {
+    public UserDTO() {
+    }
+
+    public UserDTO(Long userId, Date userCreated, String userEmail, String userPassword, String userFirstName, String userLastName, Date userDob, String userBio, int userType, PhotographDTO userPhotograph) {
+        this.userId = userId;
+        this.userCreated = userCreated;
+        this.userEmail = userEmail;
+        this.userPassword = userPassword;
+        this.userFirstName = userFirstName;
+        this.userLastName = userLastName;
+        this.userDob = userDob;
+        this.userBio = userBio;
+        this.userType = userType;
+        this.userPhotograph = userPhotograph;
+    }
+
+    public Long getUserId() {
         return userId;
     }
 
-    public void setUserId(Integer userId) {
+    public void setUserId(Long userId) {
         this.userId = userId;
     }
 
     public Date getUserDob() {
         return userDob;
     }
-
 
     public void setUserDob(Date userDob) {
         this.userDob = userDob;
@@ -123,20 +122,28 @@ public class UserDTO {
         this.userType = userType;
     }
 
+    public PhotographDTO getUserPhotograph() {
+        return userPhotograph;
+    }
+
+    public void setUserPhotograph(PhotographDTO userPhotograph) {
+        this.userPhotograph = userPhotograph;
+    }
 
 
     @Override
     public String toString() {
-        return "User{" +
+        return "UserDTO{" +
                 "userId=" + userId +
                 ", userCreated=" + userCreated +
                 ", userEmail='" + userEmail + '\'' +
                 ", userPassword='" + userPassword + '\'' +
                 ", userFirstName='" + userFirstName + '\'' +
                 ", userLastName='" + userLastName + '\'' +
-                ", userDOB=" + userDob +
+                ", userDob=" + userDob +
                 ", userBio='" + userBio + '\'' +
                 ", userType=" + userType +
+                ", userPhotograph=" + userPhotograph +
                 '}';
     }
 }

@@ -1,7 +1,6 @@
 package com.orienteering.rest.demo;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import javax.persistence.*;
 import java.util.List;
@@ -25,7 +24,7 @@ public class Control {
     @ManyToOne(fetch = FetchType.EAGER)
     private Course controlCourse;
 
-    @OneToOne(mappedBy = "control", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "entity", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private ControlPhotograph controlPhotograph;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "pcpControl", cascade = CascadeType.ALL)

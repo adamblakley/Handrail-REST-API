@@ -43,12 +43,10 @@ public class CustomUserDetailsService implements UserDetailsService {
      * @return
      * @throws UsernameNotFoundException
      */
-    public UserDetails loadUserById(Integer userId) throws UsernameNotFoundException{
-        try{
-            User user = userRepository.findById(userId).get();
+    public UserDetails loadUserById(Long userId) throws UsernameNotFoundException{
+            User user = userRepository.findById(userId).orElseThrow(()->{
+                        return new UsernameNotFoundException("user not found with email: "+userId);
+            });
             return UserPrincipal.create(user);
-        } catch( UsernameNotFoundException u){
-            throw new UsernameNotFoundException("User not found with id : "+userId);
-        }
     }
 }

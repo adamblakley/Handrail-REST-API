@@ -1,7 +1,5 @@
 package com.orienteering.rest.demo.service;
 
-import com.orienteering.rest.demo.Control;
-
 import com.orienteering.rest.demo.ControlPhotograph;
 import com.orienteering.rest.demo.repository.ControlPhotographRepository;
 
@@ -30,11 +28,11 @@ public class ControlPhotographService {
         controlPhotographRepository.save(controlPhotograph);
     }
 
-    public ControlPhotograph findControlPhotograph(Integer id) {
+    public ControlPhotograph findControlPhotograph(Long id) {
         return controlPhotographRepository.findById(id).get();
     }
 
-    public void deleteControlPhotograph(Integer id) {
+    public void deleteControlPhotograph(Long id) {
         controlPhotographRepository.deleteById(id);
     }
 }

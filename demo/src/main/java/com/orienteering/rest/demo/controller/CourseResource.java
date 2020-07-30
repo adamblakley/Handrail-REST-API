@@ -46,7 +46,7 @@ public class CourseResource {
     }
 
     @GetMapping("users/{id}/courses")
-    public List<CourseDTO> retrieveAllCoursesByUser(@PathVariable Integer id){
+    public List<CourseDTO> retrieveAllCoursesByUser(@PathVariable Long id){
         User user = userService.findUser(id);
         List<Course> courses = user.getCourses();
         return courses.stream().map(this::convertToDto).collect(Collectors.toList());

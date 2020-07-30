@@ -40,7 +40,6 @@ public class ParticipantDTO {
     }
 
 
-
     public List<RoutePointDTO> getRoutePoints() {
         return routePoints;
     }

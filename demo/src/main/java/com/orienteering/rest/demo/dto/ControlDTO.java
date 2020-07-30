@@ -13,14 +13,12 @@ public class ControlDTO {
     private Double controlLongitude;
     private Double controlAltitude;
 
-
-    private ControlPhotograph controlPhotograph;
+    private PhotographDTO controlPhotograph;
 
     public ControlDTO() {
-        super();
     }
 
-    public ControlDTO(Integer controlId, String controlName, String controlNote, Long controlTime, Double controlLatitude, Double controlLongitude, Double controlAltitude, ControlPhotograph controlPhotograph) {
+    public ControlDTO(Integer controlId, String controlName, String controlNote, Long controlTime, Double controlLatitude, Double controlLongitude, Double controlAltitude, PhotographDTO controlPhotograph) {
         this.controlId = controlId;
         this.controlName = controlName;
         this.controlNote = controlNote;
@@ -95,11 +93,11 @@ public class ControlDTO {
         this.controlAltitude = controlAltitude;
     }
 
-    public ControlPhotograph getControlPhotograph() {
+    public PhotographDTO getControlPhotograph() {
         return controlPhotograph;
     }
 
-    public void setControlPhotograph(ControlPhotograph controlPhotograph) {
+    public void setControlPhotograph(PhotographDTO controlPhotograph) {
         this.controlPhotograph = controlPhotograph;
     }
 

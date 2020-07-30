@@ -1,4 +1,6 @@
 package com.orienteering.rest.demo.dto;
+import com.orienteering.rest.demo.EventPhotograph;
+
 import java.util.Date;
 import java.util.List;
 
@@ -13,6 +15,7 @@ public class EventDTO {
     private Integer eventStatus;
     private CourseDTO eventCourse;
     private List<ParticipantDTO> participants;
+    private PhotographDTO eventPhotograph;
 
     public EventDTO() {
         super();
@@ -90,6 +93,15 @@ public class EventDTO {
         this.participants = participants;
     }
 
+    public PhotographDTO getEventPhotograph() {
+        return eventPhotograph;
+    }
+
+    public void setEventPhotograph(PhotographDTO eventPhotograph) {
+        this.eventPhotograph = eventPhotograph;
+    }
+
+
     @Override
     public String toString() {
         return "EventDTO{" +
@@ -101,6 +113,7 @@ public class EventDTO {
                 ", eventNote='" + eventNote + '\'' +
                 ", eventStatus=" + eventStatus +
                 ", eventCourse=" + eventCourse +
+                ", eventPhotograph=" + eventPhotograph +
                 '}';
     }
 }

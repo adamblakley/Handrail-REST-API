@@ -1,12 +1,13 @@
 package com.orienteering.rest.demo.controller;
 
+import com.orienteering.rest.demo.*;
+import com.orienteering.rest.demo.service.EventPhotographService;
 import com.orienteering.rest.demo.service.ImageUploadService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -16,17 +17,31 @@ public class ImageUploadResource {
     @Autowired
     ImageUploadService imageUploadService;
 
+    @Autowired
+    EventPhotographService eventPhotographService;
+
+    @Autowired
+
     @GetMapping("/")
     public String index(){
         return "upload";
     }
 
-    @PostMapping("/uploadimage")
-    public String uploadImage(@RequestParam("file")MultipartFile file, RedirectAttributes redirectAttributes){
-        imageUploadService.uploadImage(file);
+    @PostMapping("/uploadeventimage")
+    public ResponseEntity<StatusResponseEntity<Boolean>> uploadImage(@RequestParam("file")MultipartFile file, RedirectAttributes redirectAttributes){
 
-        redirectAttributes.addFlashAttribute("message","You have successfully uploaded the image"+file.getOriginalFilename()+"!");
+        ImageUploadResponse imageUploadResponse = imageUploadService.uploadImage(file);
 
-        return "redirect:/";
+        if(imageUploadResponse.getSuccess()){
+            EventPhotograph eventPhotograph = new EventPhotograph();
+            eventPhotograph.setPhotoName("imageUploadRequest.getName()");
+            eventPhotograph.setPhotoPath(imageUploadResponse.getFilepath());
+            if(eventPhotographService.saveEventPhotograph(eventPhotograph)){
+                return  new ResponseEntity( new StatusResponseEntity(true, "Image upload successful: "+eventPhotograph.getPhotoPath(),false), HttpStatus.OK);
+            } else {
+                return  new ResponseEntity( new StatusResponseEntity(false, "Image entity failure",false), HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+        }
+        return  new ResponseEntity( new StatusResponseEntity(false, "Image upload failed",false), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }

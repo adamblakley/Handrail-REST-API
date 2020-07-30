@@ -1,13 +1,12 @@
 package com.orienteering.rest.demo.service;
 
 import com.orienteering.rest.demo.ImageUploadProperties;
+import com.orienteering.rest.demo.ImageUploadResponse;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -29,18 +28,18 @@ public class ImageUploadService {
         }
     }
 
-    public void uploadImage(MultipartFile file){
-
+    public ImageUploadResponse uploadImage(MultipartFile file){
         String filename = StringUtils.cleanPath(file.getOriginalFilename());
-
         try{
             Path copylocation = this.fileStorageLocation.resolve(filename);
             Files.copy(file.getInputStream(),copylocation, StandardCopyOption.REPLACE_EXISTING);
+
+            return new ImageUploadResponse(true,"http://192.168.0.21:8080/uploads/photographs/"+file.getOriginalFilename());
         } catch (Exception e){
             System.out.println("Error Storing file");
             e.printStackTrace();
+            return new ImageUploadResponse(true,null);
         }
-
     }
 
 }

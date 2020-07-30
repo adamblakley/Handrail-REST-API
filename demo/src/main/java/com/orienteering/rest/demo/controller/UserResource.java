@@ -7,6 +7,7 @@ import com.orienteering.rest.demo.dto.UserDTO;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import com.orienteering.rest.demo.repository.UserRepository;
@@ -34,20 +35,20 @@ public class UserResource {
     }
 
     @GetMapping("/users/{id}")
-    public UserDTO retrieveUser(@PathVariable Integer id){
+    public UserDTO retrieveUser(@PathVariable Long id){
         User user = userService.findUser(id);
         return convertToDto(user);
     }
 
     @PostMapping("/users")
-    public Integer createUser(@Valid @RequestBody User user){
+    public Long createUser(@Valid @RequestBody User user){
         userService.saveUser(user);
         return user.getUserId();
     }
 
     @PostMapping("/usersmany")
-    public List<Integer> createParticipantControlPerformances(@Valid @RequestBody List<User> users){
-        List<Integer> ids = new ArrayList<Integer>();
+    public List<Long> createParticipantControlPerformances(@Valid @RequestBody List<User> users){
+        List<Long> ids = new ArrayList<Long>();
         for (User user : users){
             userService.saveUser(user);
             ids.add(user.getUserId());

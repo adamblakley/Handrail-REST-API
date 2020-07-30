@@ -12,11 +12,9 @@ import java.util.Set;
 @Entity
 public class User {
 
-
-
     @Id
     @GeneratedValue
-    private Integer userId;
+    private Long userId;
 
     private Date userCreated;
 
@@ -44,7 +42,10 @@ public class User {
     @OneToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL,mappedBy = "courseUser")
     private List<Course> courses;
 
-    @ManyToMany(fetch = FetchType.LAZY)
+    @OneToOne(mappedBy = "entity", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private UserPhotograph userPhotograph;
+
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinColumn(name = "role_id")
     private Set<Role> userRoles = new HashSet<>();
 
@@ -80,11 +81,11 @@ public class User {
         this.events = events;
     }
 
-    public Integer getUserId() {
+    public Long getUserId() {
         return userId;
     }
 
-    public void setUserId(Integer userId) {
+    public void setUserId(Long userId) {
         this.userId = userId;
     }
 
@@ -176,6 +177,14 @@ public class User {
         this.userRoles = userRoles;
     }
 
+    public UserPhotograph getUserPhotograph() {
+        return userPhotograph;
+    }
+
+    public void setUserPhotograph(UserPhotograph userPhotograph) {
+        this.userPhotograph = userPhotograph;
+    }
+
     @Override
     public String toString() {
         return "User{" +
@@ -185,9 +194,11 @@ public class User {
                 ", userPassword='" + userPassword + '\'' +
                 ", userFirstName='" + userFirstName + '\'' +
                 ", userLastName='" + userLastName + '\'' +
-                ", userDOB=" + userDob +
+                ", userDob=" + userDob +
                 ", userBio='" + userBio + '\'' +
                 ", userType=" + userType +
+                ", userPhotograph=" + userPhotograph +
+                ", userRoles=" + userRoles +
                 '}';
     }
 }

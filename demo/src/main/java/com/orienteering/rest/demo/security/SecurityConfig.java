@@ -60,7 +60,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
      */
     @Override
     public void configure(AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception{
-
         authenticationManagerBuilder.userDetailsService(customUserDetailsService).passwordEncoder(passwordEncoder());
     }
 
@@ -96,7 +95,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                     .and()
                 .authorizeRequests()
-                    .antMatchers("/")
+                    .antMatchers("/","/**/**/*.jpg")
                         .permitAll()
                     .antMatchers("/error")
                         .permitAll()
@@ -107,7 +106,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     .antMatchers("/user/checkUserNameAvailability","/user/checkEmailAvailability")
                         .permitAll()
                     .anyRequest()
-                        .authenticated();
+                        .authenticated()
+                    .and();
 
         http
                 .headers()

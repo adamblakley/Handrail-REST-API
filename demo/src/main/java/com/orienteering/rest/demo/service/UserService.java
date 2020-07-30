@@ -33,11 +33,11 @@ public class UserService {
 
 
     @Transactional(readOnly = true)
-    public User findUser(Integer id){
+    public User findUser(Long id){
         return userRepository.findById(id).get();
     }
 
-    public void deleteUser(Integer id){
+    public void deleteUser(Long id){
         userRepository.deleteById(id);
     }
 

@@ -29,7 +29,7 @@ public class Role {
     /**
      * User join
      */
-    @ManyToMany(fetch = FetchType.LAZY,mappedBy = "userRoles")
+    @ManyToMany(fetch = FetchType.EAGER,mappedBy = "userRoles")
     private List<User> roleUsers;
 
     /**

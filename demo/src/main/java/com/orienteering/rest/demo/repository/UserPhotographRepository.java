@@ -1,12 +1,9 @@
 package com.orienteering.rest.demo.repository;
 
-import com.orienteering.rest.demo.ControlPhotograph;
+import com.orienteering.rest.demo.UserPhotograph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface ControlPhotographRepository extends JpaRepository<ControlPhotograph, Long> {
-
-
-
+public interface UserPhotographRepository extends JpaRepository<UserPhotograph, Long> {
 }

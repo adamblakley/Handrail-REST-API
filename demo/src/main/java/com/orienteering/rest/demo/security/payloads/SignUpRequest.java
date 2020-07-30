@@ -9,13 +9,13 @@ import java.util.Date;
 public class SignUpRequest {
 
     @NotBlank
-    @Size(max = 20)
+    @Size(min = 1,max = 20)
     private String firstName;
     @NotBlank
-    @Size(max = 20)
+    @Size(min = 1,max = 20)
     private String lastName;
     @NotBlank
-    @Size(max = 40)
+    @Size(min = 1,max = 40)
     @Email
     private String email;
     @NotBlank
@@ -23,6 +23,7 @@ public class SignUpRequest {
     private String password;
     @Past
     private Date userDob;
+    @Size(min = 1, max = 100)
     private String userBio;
 
     /**

@@ -32,6 +32,10 @@ public class Event {
     @OneToMany(mappedBy = "participantEvent", cascade = CascadeType.PERSIST)
     private List<Participant> participants;
 
+    @JsonManagedReference
+    @OneToOne(mappedBy = "entity", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private EventPhotograph eventPhotograph;
+
 
     public Event() {
         super();
@@ -118,6 +122,15 @@ public class Event {
         this.participants.add(participant);
     }
 
+    public EventPhotograph getEventPhotograph() {
+        return eventPhotograph;
+    }
+
+    public void setEventPhotograph(EventPhotograph eventPhotograph) {
+        this.eventPhotograph = eventPhotograph;
+    }
+
+
     @Override
     public String toString() {
         return "Event{" +
@@ -128,6 +141,7 @@ public class Event {
                 ", eventNote='" + eventNote + '\'' +
                 ", eventStatus=" + eventStatus +
                 ", eventCourse=" + eventCourse +
+                ", eventPhotograph=" + eventPhotograph +
                 '}';
     }
 }

@@ -91,7 +91,7 @@ public class UserPrincipal implements UserDetails {
                 new SimpleGrantedAuthority(role.getERole().name())
         ).collect(Collectors.toList());
         UserPrincipal userPrincipal = new UserPrincipal(
-                user.getUserId().longValue(),user.getUserEmail(),user.getUserPassword(),authorities
+                user.getUserId(),user.getUserEmail(),user.getUserPassword(),authorities
         );
         return userPrincipal;
     }
