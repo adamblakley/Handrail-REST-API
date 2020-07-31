@@ -4,6 +4,7 @@ import com.orienteering.rest.demo.ERole;
 import com.orienteering.rest.demo.Role;
 import com.orienteering.rest.demo.StatusResponseEntity;
 import com.orienteering.rest.demo.User;
+import com.orienteering.rest.demo.dto.UserDTO;
 import com.orienteering.rest.demo.repository.RoleRepository;
 import com.orienteering.rest.demo.repository.UserRepository;
 import com.orienteering.rest.demo.security.JwtTokenProvider;
@@ -13,6 +14,7 @@ import com.orienteering.rest.demo.security.payloads.APIResponse;
 import com.orienteering.rest.demo.security.payloads.JwtAuthenticationResponse;
 import com.orienteering.rest.demo.security.payloads.LoginRequest;
 import com.orienteering.rest.demo.security.payloads.SignUpRequest;
+import com.orienteering.rest.demo.security.services.CustomUserDetailsService;
 import com.orienteering.rest.demo.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -21,6 +23,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.web.bind.annotation.*;
@@ -31,6 +34,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.net.URI;
 import java.util.Collections;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/authentication")
@@ -64,7 +68,9 @@ public class AuthenticationController {
         );
             SecurityContextHolder.getContext().setAuthentication(authentication);
             String jwt = jwtTokenProvider.generateToken(authentication);
-            return  new ResponseEntity( new StatusResponseEntity(true, "User login successful",new JwtAuthenticationResponse(jwt)),HttpStatus.OK);
+            Object obj = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            UserPrincipal user = (UserPrincipal) obj;
+            return  new ResponseEntity( new StatusResponseEntity(true, "User login successful",new JwtAuthenticationResponse(jwt,user.getId())),HttpStatus.OK);
 
     }
 
@@ -79,7 +85,7 @@ public class AuthenticationController {
         if (prinicipal instanceof UserPrincipal && checkLogin((UserPrincipal)prinicipal)){
             return new ResponseEntity(new StatusResponseEntity(true, "User logged in", true),HttpStatus.OK);
         }
-        return new ResponseEntity(new StatusResponseEntity(true, "User not logged in", false),HttpStatus.OK);
+        return new ResponseEntity(new StatusResponseEntity(false, "User not logged in", false),HttpStatus.OK);
     }
 
 
@@ -94,6 +100,7 @@ public class AuthenticationController {
         }
         else return false;
     }
+
 
     /**
      * Signup request returns negative response if exists, creates new user otherwise, returns positive response
