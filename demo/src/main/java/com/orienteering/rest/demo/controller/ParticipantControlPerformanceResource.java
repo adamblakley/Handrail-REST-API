@@ -1,19 +1,18 @@
 package com.orienteering.rest.demo.controller;
 
 
-import com.orienteering.rest.demo.Control;
-import com.orienteering.rest.demo.Event;
-import com.orienteering.rest.demo.Participant;
-import com.orienteering.rest.demo.ParticipantControlPerformance;
+import com.orienteering.rest.demo.*;
 
-import com.orienteering.rest.demo.dto.ControlDTO;
-import com.orienteering.rest.demo.dto.EventDTO;
-import com.orienteering.rest.demo.dto.ParticipantControlPerformanceDTO;
+import com.orienteering.rest.demo.dto.*;
 
+import com.orienteering.rest.demo.service.EventService;
 import com.orienteering.rest.demo.service.ParticipantControlPerformanceService;
 import com.orienteering.rest.demo.service.ParticipantService;
+import com.orienteering.rest.demo.service.RoutePointService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -29,8 +28,12 @@ public class ParticipantControlPerformanceResource {
     @Autowired
     ParticipantControlPerformanceService participantControlPerformanceService;
 
+
     @Autowired
-    ParticipantService participantService;
+    EventService eventService;
+
+    @Autowired
+    RoutePointService routePointService;
 
     @Autowired
     ModelMapper modelMapper;
@@ -49,36 +52,39 @@ public class ParticipantControlPerformanceResource {
         return convertToDto(participantControlPerformance);
     }
 
-    @PostMapping("/participants/{id}/pcps")
-    public Integer createParticipantControlPerformance(@PathVariable Integer id, @Valid @RequestBody ParticipantControlPerformanceDTO participantControlPerformanceDTO){
 
-        Participant participant = participantService.findParticipant(id);
+    @PostMapping("/events/{eventId}/users/{userId}/pcps")
+    public ResponseEntity<StatusResponseEntity<?>> createParticipantControlPerformances(@PathVariable("eventId") Integer eventId, @PathVariable("userId") Long userId, @Valid @RequestBody PerformanceUploadRequest request){
 
-        ParticipantControlPerformance participantControlPerformanceToSave = convertToEntity(participantControlPerformanceDTO);
+        Participant participant = new Participant();
+        Event event = eventService.findEvent(eventId);
+        for (Participant eventParticipant : event.getParticipants()){
+            if (eventParticipant.getParticipantUser().getUserId().equals(userId)){
+                participant = eventParticipant;
+                System.out.println("participant id = "+participant.getParticipantId());
+                System.out.println("user id = "+participant.getParticipantUser().getUserId());
+                break;
+            }
+        }
 
+        if (participant.getParticipantUser().getUserId()==null){
+            return  new ResponseEntity( new StatusResponseEntity(false, "Participant not found",false), HttpStatus.NOT_FOUND);
+        }
 
-        participant.addPcp(participantControlPerformanceToSave);
-
-        participantControlPerformanceService.savePcp(participantControlPerformanceToSave);
-
-        participantService.saveParticipant(participant);
-
-        return participantControlPerformanceDTO.getPcpId();
-    }
-
-    @PostMapping("/participants/{id}/pcpsmany")
-    public List<Integer> createParticipantControlPerformances(@PathVariable Integer id, @Valid @RequestBody List<ParticipantControlPerformanceDTO> pcps){
-
-        Participant participant = participantService.findParticipant(id);
-        List<Integer> ids = new ArrayList<Integer>();
-        for (ParticipantControlPerformanceDTO pcp : pcps){
+        for (ParticipantControlPerformanceDTO pcp : request.getPerformances()){
             ParticipantControlPerformance participantControlPerformanceToSave = convertToEntity(pcp);
             participantControlPerformanceToSave.setPcpParticipant(participant);
             participantControlPerformanceService.savePcp(participantControlPerformanceToSave);
-            ids.add(participantControlPerformanceToSave.getPcpId());
         }
 
-        return ids;
+        for (RoutePointDTO routePoint : request.getRoutePoints()){
+            RoutePoint routePointToSave = convertToEntity(routePoint);
+            routePointToSave.setRoutePointParticipant(participant);
+            routePointService.saveRoutePoint(routePointToSave);
+        }
+
+        ParticipantDTO participantDTO = convertToDto(participant);
+        return  new ResponseEntity( new StatusResponseEntity(true, "Performances saved to Participant "+participantDTO.getParticipantId(),participantDTO), HttpStatus.CREATED);
     }
 
     public ParticipantControlPerformanceDTO convertToDto(ParticipantControlPerformance participantControlPerformance){
@@ -91,13 +97,21 @@ public class ParticipantControlPerformanceResource {
         return eventDto;
     }
 
+    public ParticipantDTO convertToDto(Participant participant){
+        ParticipantDTO participantDTO = modelMapper.map(participant,ParticipantDTO.class);
+        return participantDTO;
+    }
+
     private ParticipantControlPerformance convertToEntity(ParticipantControlPerformanceDTO pcpDto){
         ParticipantControlPerformance pcp = modelMapper.map(pcpDto, ParticipantControlPerformance.class);
         pcp.setPcpControl(convertToEntity(pcpDto.getPcpControl()));
         return pcp;
     }
 
-
+    private RoutePoint convertToEntity(RoutePointDTO routePointDTO){
+        RoutePoint routePoint = modelMapper.map(routePointDTO,RoutePoint.class);
+        return routePoint;
+    }
 
     private Control convertToEntity(ControlDTO controlDto){
         Control control = modelMapper.map(controlDto, Control.class);

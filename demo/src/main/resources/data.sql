@@ -28,15 +28,19 @@ INSERT INTO Control_Photograph (PHOTO_ID, PHOTO_NAME, PHOTO_PATH, Reference_ID) 
 
 
 INSERT INTO Event (eventid,event_created,event_date,event_name,event_note,event_status, course_id, user_id, is_active) VALUES
-(1,'2020-06-19 15:27:28.054','2020-06-19 15:27:28.054','event1','eventnote1',1,1,1,true);
+(1,'2020-06-19 15:27:28.054','2020-06-19 15:27:28.054','event1','eventnote1',1,1,1,true),
+(2,'2020-06-19 15:27:28.054','2020-06-19 15:27:28.054','event2','eventnote1',2,1,1,true),
+(3,'2020-06-19 15:27:28.054','2020-06-19 15:27:28.054','event3','eventnote1',3,1,1,true);
 
 INSERT INTO Event_Photograph (PHOTO_ID, PHOTO_NAME, PHOTO_PATH, Reference_ID) VALUES
-(1,'myphoto1','https://www.sciencemag.org/sites/default/files/styles/inline__450w__no_aspect/public/dogs_1280p_0.jpg?itok=4t_1_fSJ',1);
+(1,'myphoto1','https://www.sciencemag.org/sites/default/files/styles/inline__450w__no_aspect/public/dogs_1280p_0.jpg?itok=4t_1_fSJ',1),
+(2,'myphoto2','https://framptoncotterell-pc.gov.uk/wp-content/uploads/2018/11/Centenary-Field-2-480x360.jpg',2),
+(3,'myphoto3','https://www.newstatesman.com/sites/default/files/styles/lead_image/public/Longreads_2019/12/personal_story.jpg?itok=D8iYo9yy',3);
 
 INSERT INTO Participant (PARTICIPANT_ID,  	EVENTID,  	USER_ID  ) VALUES
-(1,1,2),
-(2,1,4),
-(3,1,5);
+(1,3,2),
+(2,3,4),
+(3,3,5);
 
 INSERT INTO Participant_Control_Performance (pcp_id, control_time, control_id, participant_id) VALUES
 (1, '120208', 1, 1),

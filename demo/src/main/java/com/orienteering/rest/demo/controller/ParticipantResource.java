@@ -84,6 +84,28 @@ public class ParticipantResource {
         return convertToDto(participant);
     }
 
+    @GetMapping("/events/{eventId}/users/{userId}/performances")
+    public ResponseEntity<StatusResponseEntity<?>> retrievePerformance(@PathVariable Integer eventId, @PathVariable Long userId){
+        Event event = eventService.findEvent(eventId);
+
+        Participant participant = new Participant();
+        for (Participant eventParticipant : event.getParticipants()){
+            if (eventParticipant.getParticipantUser().getUserId().equals(userId)){
+                participant = eventParticipant;
+                break;
+            }
+        }
+
+        if (participant.getParticipantUser().getUserId()==null){
+            return  new ResponseEntity( new StatusResponseEntity(false, "Participant not found",false), HttpStatus.NOT_FOUND);
+        }
+
+        EventDTO eventDTO = convertToDto(event);
+        ParticipantDTO participantDTO = convertToDto(participant);
+        PerformanceResponse performanceResponse = new PerformanceResponse(eventDTO.getEventCourse().getCourseControls(),participantDTO.getParticipantControlPerformances(), participantDTO.getRoutePoints());
+        return  new ResponseEntity( new StatusResponseEntity(true, "Participant not found",performanceResponse), HttpStatus.OK);
+    }
+
     @PostMapping("/events/{id}/participants")
     public ResponseEntity<StatusResponseEntity<?>> createParticipant(@PathVariable Integer id, @Valid @RequestBody Long userId){
 
