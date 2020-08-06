@@ -27,8 +27,8 @@ INSERT INTO Control_Photograph (PHOTO_ID, PHOTO_NAME, PHOTO_PATH, Reference_ID) 
 (4,'myphoto4','/photos/controlphotos/myphoto4.jpg',4);
 
 
-INSERT INTO Event (eventid,event_created,event_date,event_name,event_note,event_status, course_id, user_id) VALUES
-(1,'2020-06-19 15:27:28.054','2020-06-19 15:27:28.054','event1','eventnote1',2,1,1);
+INSERT INTO Event (eventid,event_created,event_date,event_name,event_note,event_status, course_id, user_id, is_active) VALUES
+(1,'2020-06-19 15:27:28.054','2020-06-19 15:27:28.054','event1','eventnote1',1,1,1,true);
 
 INSERT INTO Event_Photograph (PHOTO_ID, PHOTO_NAME, PHOTO_PATH, Reference_ID) VALUES
 (1,'myphoto1','https://www.sciencemag.org/sites/default/files/styles/inline__450w__no_aspect/public/dogs_1280p_0.jpg?itok=4t_1_fSJ',1);

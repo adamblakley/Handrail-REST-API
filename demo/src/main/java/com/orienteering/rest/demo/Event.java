@@ -36,6 +36,7 @@ public class Event {
     @OneToOne(mappedBy = "entity", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private EventPhotograph eventPhotograph;
 
+    private boolean isActive;
 
     public Event() {
         super();
@@ -130,6 +131,13 @@ public class Event {
         this.eventPhotograph = eventPhotograph;
     }
 
+    public boolean isActive() {
+        return isActive;
+    }
+
+    public void setActive(boolean active) {
+        isActive = active;
+    }
 
     @Override
     public String toString() {

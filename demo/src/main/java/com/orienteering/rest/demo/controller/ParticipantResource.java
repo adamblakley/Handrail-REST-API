@@ -1,9 +1,6 @@
 package com.orienteering.rest.demo.controller;
 
-import com.orienteering.rest.demo.Control;
-import com.orienteering.rest.demo.Event;
-import com.orienteering.rest.demo.Participant;
-import com.orienteering.rest.demo.ParticipantControlPerformance;
+import com.orienteering.rest.demo.*;
 import com.orienteering.rest.demo.dto.ControlDTO;
 import com.orienteering.rest.demo.dto.EventDTO;
 import com.orienteering.rest.demo.dto.ParticipantControlPerformanceDTO;
@@ -13,6 +10,8 @@ import com.orienteering.rest.demo.service.ParticipantService;
 import com.orienteering.rest.demo.service.UserService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -32,6 +31,9 @@ public class ParticipantResource {
 
     @Autowired
     EventService eventService;
+
+    @Autowired
+    UserService userService;
 
     @Autowired
     ModelMapper modelMapper;
@@ -83,23 +85,51 @@ public class ParticipantResource {
     }
 
     @PostMapping("/events/{id}/participants")
-    public Integer createParticipant(@PathVariable Integer id, @Valid @RequestBody ParticipantDTO participantDTO){
+    public ResponseEntity<StatusResponseEntity<?>> createParticipant(@PathVariable Integer id, @Valid @RequestBody Long userId){
 
         Event event = eventService.findEvent(id);
-
-        Participant participantToSave = convertToEntity(participantDTO);
-        participantToSave.setParticipantEvent(event);
-        event.addParticipant(participantToSave);
-
-        participantService.saveParticipant(participantToSave);
+        User user = userService.findUser(userId);
+        Participant participant = new Participant();
+        participant.setParticipantEvent(event);
+        participant.setParticipantUser(user);
+        event.addParticipant(participant);
+        participantService.saveParticipant(participant);
         eventService.saveEvent(event);
+        ParticipantDTO participantDto = convertToDto(participant);
+        EventDTO eventDto = convertToDto(event);
+        return new ResponseEntity(new StatusResponseEntity(false, "User not logged in", eventDto), HttpStatus.CREATED);
+    }
 
-        return participantDTO.getParticipantId();
+    @PutMapping("/events/{id}/removeparticipant")
+    public ResponseEntity<StatusResponseEntity<?>> removeParticipant(@PathVariable Integer id, @Valid @RequestBody Long userId){
+        Event event = eventService.findEvent(id);
+        for (Participant participant : event.getParticipants()){
+            if (participant.getParticipantUser().getUserId()==userId){
+                event.getParticipants().remove(participant);
+                participant.setParticipantEvent(null);
+                participantService.saveParticipant(participant);
+                break;
+            }
+        }
+
+       // Event eventSaved = eventService.saveEvent(event);
+
+        if (event.getEventID()==event.getEventID()){
+            EventDTO eventDto = convertToDto(event);
+            return new ResponseEntity(new StatusResponseEntity(false, "Participant Removed", eventDto), HttpStatus.OK);
+        } else {
+            EventDTO eventDto = convertToDto(event);
+            return new ResponseEntity(new StatusResponseEntity(false, "Failure Removing Participant", eventDto), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
 
     public ParticipantDTO convertToDto(Participant participant){
         return modelMapper.map(participant,ParticipantDTO.class);
+    }
+
+    public EventDTO convertToDto(Event event){
+        return modelMapper.map(event,EventDTO.class);
     }
 
     private Participant convertToEntity(ParticipantDTO participantDto){

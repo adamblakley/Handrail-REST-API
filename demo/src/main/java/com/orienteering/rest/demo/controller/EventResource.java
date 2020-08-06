@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.parameters.P;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -19,7 +20,6 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.validation.Valid;
 import java.util.Calendar;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
@@ -39,10 +39,14 @@ public class EventResource {
 
 
     @GetMapping("/events")
-    public List<EventDTO> retrieveAllEvents(){
+    public ResponseEntity<StatusResponseEntity<?>> retrieveAllEvents(){
+        List<Event> events = eventService.findActiveEvents();
+        if (events.isEmpty()){
+            return new ResponseEntity( new StatusResponseEntity(false, "No Events Available",false), HttpStatus.NOT_FOUND);
+        } else {
+            return new ResponseEntity( new StatusResponseEntity(true, "Events Found",events.stream().map(this::convertToDto).collect(Collectors.toList())), HttpStatus.OK);
+        }
 
-        List<Event> events = eventService.findAllEvents();
-        return events.stream().map(this::convertToDto).collect(Collectors.toList());
     }
 
     @GetMapping("/events/{id}")
@@ -58,10 +62,44 @@ public class EventResource {
         return events.stream().map(this::convertToDto).collect(Collectors.toList());
     }
 
+    @PutMapping("/events/{id}/delete")
+    public ResponseEntity<StatusResponseEntity<Boolean>> deleteEvent (@PathVariable Integer id){
+        Event event = eventService.findEvent(id);
+        if (event!=null){
+            if (!event.isActive()){
+                return new ResponseEntity( new StatusResponseEntity(false, "Event Already Removed",false), HttpStatus.CONFLICT);
+            }
+            event.setActive(false);
+            eventService.saveEvent(event);
+            return new ResponseEntity( new StatusResponseEntity(true, "Event Successfully Deleted",true), HttpStatus.OK);
+        } else {
+            return new ResponseEntity( new StatusResponseEntity(false, "Event Removal Unsuccessful",false), HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @PutMapping("events/{id}/updatestatus")
+    public ResponseEntity<StatusResponseEntity<EventDTO>> updateEventStatus(@PathVariable Integer id){
+        Event event = eventService.findEvent(id);
+        switch (event.getEventStatus()){
+            case 1: event.setEventStatus(2);
+                break;
+            case 2: event.setEventStatus(3);
+                break;
+            default:
+                break;
+        }
+        if (event.getEventID()==eventService.saveEvent(event).getEventID()){
+            EventDTO eventDto = convertToDto(event);
+            return new ResponseEntity( new StatusResponseEntity(true, "Event Update Successful",eventDto), HttpStatus.OK);
+        } else {
+            return new ResponseEntity( new StatusResponseEntity(false, "Event Update Successful",false), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
     @Transactional
     @PostMapping("/users/{id}/events")
     public ResponseEntity<StatusResponseEntity<EventDTO>> createEvent(@PathVariable Long id, @Valid @RequestPart("event")EventDTO eventDto, @RequestParam("file")MultipartFile file){
-
+        System.out.println(file.getResource().getFilename());
         ImageUploadResponse imageUploadResponse = uploadEventPhotograph(file);
 
         if (imageUploadResponse.getSuccess()) {
@@ -72,6 +110,7 @@ public class EventResource {
             photograph.setEntity(event);
             event.setEventPhotograph(photograph);
             event.setEventStatus(1);
+            event.setActive(true);
             event.setEventCreated(Calendar.getInstance().getTime());
             User user = userService.findUser(id);
             event.setEventOrganiser(user);

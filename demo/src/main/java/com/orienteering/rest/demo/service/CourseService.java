@@ -25,8 +25,8 @@ public class CourseService {
         return courses;
     }
 
-    public void saveCourse(Course course){
-        courseRepository.save(course);
+    public Course saveCourse(Course course){
+        return courseRepository.save(course);
     }
     @Transactional(readOnly = true)
     public Course findCourse(Integer id){

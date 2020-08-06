@@ -27,6 +27,8 @@ public class EventService {
         return events;
     }
 
+    public List<Event> findActiveEvents(){return eventRepository.findByIsActiveTrue();}
+
     /* Example. To Be ued in reference and deleted
     @Transactional(readOnly = true)
     public List<Event> findAllEventsByUser(Integer id){
@@ -40,8 +42,8 @@ public class EventService {
     }
     */
 
-    public void saveEvent(Event event){
-        eventRepository.save(event);
+    public Event saveEvent(Event event){
+        return eventRepository.save(event);
     }
 
     @Transactional(readOnly = true)
@@ -49,7 +51,12 @@ public class EventService {
         return eventRepository.findById(id).get();
     }
 
-    public void deleteEvent(Integer id){
-        eventRepository.deleteById(id);
+    public Boolean deleteEvent(Integer id) {
+        if (eventRepository.existsById(id)) {
+            eventRepository.deleteById(id);
+            return true;
+        } else {
+            return false;
+        }
     }
 }

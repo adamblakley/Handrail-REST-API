@@ -27,6 +27,7 @@ public class ImageUploadResource {
         return "upload";
     }
 
+
     @PostMapping("/uploadeventimage")
     public ResponseEntity<StatusResponseEntity<Boolean>> uploadImage(@RequestParam("file")MultipartFile file, RedirectAttributes redirectAttributes){
 

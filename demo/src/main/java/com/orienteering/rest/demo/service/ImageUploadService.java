@@ -30,6 +30,7 @@ public class ImageUploadService {
 
     public ImageUploadResponse uploadImage(MultipartFile file){
         String filename = StringUtils.cleanPath(file.getOriginalFilename());
+        System.out.println(filename);
         try{
             Path copylocation = this.fileStorageLocation.resolve(filename);
             Files.copy(file.getInputStream(),copylocation, StandardCopyOption.REPLACE_EXISTING);
