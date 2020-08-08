@@ -29,6 +29,8 @@ public class Course {
     @JoinColumn(name="user_id")
     private User courseUser;
 
+    private boolean isActive;
+
     public Course(){
         super();
     }
@@ -81,6 +83,14 @@ public class Course {
         this.courseUser = courseUser;
     }
 
+    public boolean isActive() {
+        return isActive;
+    }
+
+    public void setActive(boolean active) {
+        isActive = active;
+    }
+    
     @Override
     public String toString() {
         return "Course{" +
@@ -89,6 +99,7 @@ public class Course {
                 ", courseDate=" + courseDate +
                 ", courseControls=" + courseControls +
                 ", courseUser=" + courseUser +
+                ", isActive=" + isActive +
                 '}';
     }
 }

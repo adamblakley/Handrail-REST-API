@@ -62,6 +62,13 @@ public class EventResource {
         return events.stream().map(this::convertToDto).collect(Collectors.toList());
     }
 
+    @GetMapping("users/{id}/events/history")
+    public ResponseEntity<StatusResponseEntity<List<EventDTO>>> retrieveEventsByUserHistory(@PathVariable Long id){
+        User user = userService.findUser(id);
+        List<Event> events = eventService.findEventsByParticipantHistory(user);
+        return new ResponseEntity( new StatusResponseEntity(true, "Events Found",events.stream().map(this::convertToDto).collect(Collectors.toList())), HttpStatus.OK);
+    }
+
     @PutMapping("/events/{id}/delete")
     public ResponseEntity<StatusResponseEntity<Boolean>> deleteEvent (@PathVariable Integer id){
         Event event = eventService.findEvent(id);

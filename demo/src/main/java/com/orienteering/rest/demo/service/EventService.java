@@ -1,6 +1,8 @@
 package com.orienteering.rest.demo.service;
 
 import com.orienteering.rest.demo.Event;
+import com.orienteering.rest.demo.Participant;
+import com.orienteering.rest.demo.User;
 import com.orienteering.rest.demo.repository.EventRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,6 +29,23 @@ public class EventService {
         return events;
     }
 
+    public List<Event> findEventsByParticipantHistory(User user) {
+
+        List<Event> events= eventRepository.findByParticipants_ParticipantUser(user);
+        List<Event> appropriateEvents = new ArrayList<Event>();
+
+        for (Event event : events){
+            for (Participant participant : event.getParticipants()){
+                if (participant.getParticipantUser().equals(user)){
+                    if (!participant.getParticipantControlPerformances().isEmpty()){
+                        appropriateEvents.add(event);
+                    }
+                    break;
+                }
+            }
+        }
+        return appropriateEvents;
+    }
     public List<Event> findActiveEvents(){return eventRepository.findByIsActiveTrue();}
 
     /* Example. To Be ued in reference and deleted
@@ -59,4 +78,6 @@ public class EventService {
             return false;
         }
     }
+
+
 }

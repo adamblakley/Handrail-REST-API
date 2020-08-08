@@ -2,6 +2,7 @@ package com.orienteering.rest.demo.service;
 
 import com.orienteering.rest.demo.Course;
 import com.orienteering.rest.demo.Event;
+import com.orienteering.rest.demo.User;
 import com.orienteering.rest.demo.repository.CourseRepository;
 import com.orienteering.rest.demo.repository.EventRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,7 +34,7 @@ public class CourseService {
         return courseRepository.findById(id).get();
     }
 
-    //public Course findCoursebyEventID(Integer eventId) {return courseRepository}
+    public List<Course> findCoursesByUser(User user){return courseRepository.findByCourseUserAndIsActiveTrue(user);}
 
     public void deleteCourse(Integer id){
         courseRepository.deleteById(id);

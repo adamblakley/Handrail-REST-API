@@ -45,9 +45,18 @@ public class CourseResource {
 
 
     @GetMapping("/courses/{id}")
-    public CourseDTO retrieveCourses(@PathVariable Integer id){
+    public ResponseEntity<StatusResponseEntity<CourseDTO>> retrieveCourses(@PathVariable Integer id){
         Course course = courseService.findCourse(id);
-        return convertToDto(course);
+        CourseDTO courseDTO = convertToDto(course);
+        return new ResponseEntity( new StatusResponseEntity(true, "Courses Found",courseDTO), HttpStatus.OK);
+
+    }
+
+    @GetMapping("/users/{id}/courses")
+    public ResponseEntity<StatusResponseEntity<List<CourseDTO>>> findCoursesByUser(@PathVariable Long id){
+        User user = userService.findUser(id);
+        List<Course> courses = courseService.findCoursesByUser(user);
+        return new ResponseEntity( new StatusResponseEntity(true, "Course Found",courses.stream().map(this::convertToDto).collect(Collectors.toList())), HttpStatus.OK);
     }
 
     @PostMapping("/courses")
@@ -61,7 +70,7 @@ public class CourseResource {
     public ResponseEntity<StatusResponseEntity<Course>> createCourses1(@PathVariable Long id,@Valid @RequestPart("course") CourseDTO courseDto, @RequestPart("file") MultipartFile[] files){
 
         Course course = convertToEntity(courseDto);
-
+        course.setActive(true);
         for (int i = 0; i<files.length; i++)
         {
             if (!files[i].isEmpty()){
@@ -94,13 +103,6 @@ public class CourseResource {
     public ImageUploadResponse uploadControlPhotograph(MultipartFile file){
         ImageUploadResponse imageUploadResponse = imageUploadService.uploadImage(file);
         return imageUploadResponse;
-    }
-
-    @GetMapping("users/{id}/courses")
-    public List<CourseDTO> retrieveAllCoursesByUser(@PathVariable Long id){
-        User user = userService.findUser(id);
-        List<Course> courses = user.getCourses();
-        return courses.stream().map(this::convertToDto).collect(Collectors.toList());
     }
 
     @GetMapping("user/courses")
