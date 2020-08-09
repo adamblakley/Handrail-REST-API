@@ -1,14 +1,12 @@
 package com.orienteering.rest.demo.dto;
 
-import com.orienteering.rest.demo.ControlPhotograph;
-
 public class ControlDTO {
 
     private Integer controlId;
     private Integer controlPosition;
     private String controlName;
     private String controlNote;
-    private Long controlTime;
+    private String controlTime;
     private Double controlLatitude;
     private Double controlLongitude;
     private Double controlAltitude;
@@ -18,7 +16,7 @@ public class ControlDTO {
     public ControlDTO() {
     }
 
-    public ControlDTO(Integer controlId, String controlName, String controlNote, Long controlTime, Double controlLatitude, Double controlLongitude, Double controlAltitude, PhotographDTO controlPhotograph) {
+    public ControlDTO(Integer controlId, String controlName, String controlNote, String controlTime, Double controlLatitude, Double controlLongitude, Double controlAltitude, PhotographDTO controlPhotograph) {
         this.controlId = controlId;
         this.controlName = controlName;
         this.controlNote = controlNote;
@@ -61,11 +59,11 @@ public class ControlDTO {
         this.controlNote = controlNote;
     }
 
-    public Long getControlTime() {
+    public String getControlTime() {
         return controlTime;
     }
 
-    public void setControlTime(Long controlTime) {
+    public void setControlTime(String controlTime) {
         this.controlTime = controlTime;
     }
 

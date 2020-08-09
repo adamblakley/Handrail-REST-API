@@ -122,6 +122,21 @@ public class CourseResource {
         }
     }
 
+    @PutMapping("courses/{id}/delete")
+    public ResponseEntity<StatusResponseEntity<Boolean>> deleteCourse(@PathVariable int id){
+        Course course = courseService.findCourse(id);
+        if (course!=null){
+            if (!course.isActive()){
+                return new ResponseEntity( new StatusResponseEntity(false, "Course Already Removed",false), HttpStatus.CONFLICT);
+            }
+            course.setActive(false);
+            courseService.saveCourse(course);
+            return new ResponseEntity( new StatusResponseEntity(true, "Course Successfully Deleted",true), HttpStatus.OK);
+        } else {
+            return new ResponseEntity( new StatusResponseEntity(false, "Course Removal Unsuccessful",false), HttpStatus.NOT_FOUND);
+        }
+    }
+
     private CourseDTO convertToDto(Course course){
         CourseDTO courseDto = modelMapper.map(course,CourseDTO.class);
         return courseDto;

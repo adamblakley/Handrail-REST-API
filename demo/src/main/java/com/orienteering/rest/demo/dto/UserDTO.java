@@ -15,11 +15,7 @@ public class UserDTO {
 
     private Long userId;
 
-    private Date userCreated;
-
     private String userEmail;
-
-    private String userPassword;
 
     private String userFirstName;
 
@@ -29,23 +25,18 @@ public class UserDTO {
 
     private String userBio;
 
-    private int userType;
-
     private PhotographDTO userPhotograph;
 
     public UserDTO() {
     }
 
-    public UserDTO(Long userId, Date userCreated, String userEmail, String userPassword, String userFirstName, String userLastName, Date userDob, String userBio, int userType, PhotographDTO userPhotograph) {
+    public UserDTO(Long userId, String userEmail, String userFirstName, String userLastName, Date userDob, String userBio, PhotographDTO userPhotograph) {
         this.userId = userId;
-        this.userCreated = userCreated;
         this.userEmail = userEmail;
-        this.userPassword = userPassword;
         this.userFirstName = userFirstName;
         this.userLastName = userLastName;
         this.userDob = userDob;
         this.userBio = userBio;
-        this.userType = userType;
         this.userPhotograph = userPhotograph;
     }
 
@@ -65,14 +56,6 @@ public class UserDTO {
         this.userDob = userDob;
     }
 
-    public Date getUserCreated() {
-        return userCreated;
-    }
-
-    public void setUserCreated(Date userCreated) {
-        this.userCreated = userCreated;
-    }
-
     public String getUserEmail() {
         return userEmail;
     }
@@ -81,13 +64,6 @@ public class UserDTO {
         this.userEmail = userEmail;
     }
 
-    public String getUserPassword() {
-        return userPassword;
-    }
-
-    public void setUserPassword(String userPassword) {
-        this.userPassword = userPassword;
-    }
 
     public String getUserFirstName() {
         return userFirstName;
@@ -105,21 +81,12 @@ public class UserDTO {
         this.userLastName = userLastName;
     }
 
-
     public String getUserBio() {
         return userBio;
     }
 
     public void setUserBio(String userBio) {
         this.userBio = userBio;
-    }
-
-    public int getUserType() {
-        return userType;
-    }
-
-    public void setUserType(int userType) {
-        this.userType = userType;
     }
 
     public PhotographDTO getUserPhotograph() {
@@ -135,14 +102,11 @@ public class UserDTO {
     public String toString() {
         return "UserDTO{" +
                 "userId=" + userId +
-                ", userCreated=" + userCreated +
                 ", userEmail='" + userEmail + '\'' +
-                ", userPassword='" + userPassword + '\'' +
                 ", userFirstName='" + userFirstName + '\'' +
                 ", userLastName='" + userLastName + '\'' +
                 ", userDob=" + userDob +
                 ", userBio='" + userBio + '\'' +
-                ", userType=" + userType +
                 ", userPhotograph=" + userPhotograph +
                 '}';
     }

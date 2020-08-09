@@ -14,7 +14,7 @@ public class Control {
     private Integer controlPosition;
     private String controlName;
     private String controlNote;
-    private Long controlTime;
+    private String controlTime;
     private Double controlLatitude;
     private Double controlLongitude;
     private Double controlAltitude;
@@ -66,11 +66,11 @@ public class Control {
         this.controlNote = controlNote;
     }
 
-    public Long getControlTime() {
+    public String getControlTime() {
         return controlTime;
     }
 
-    public void setControlTime(Long controlTime) {
+    public void setControlTime(String controlTime) {
         this.controlTime = controlTime;
     }
 
