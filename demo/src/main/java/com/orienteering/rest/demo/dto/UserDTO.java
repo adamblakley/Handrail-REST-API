@@ -1,12 +1,5 @@
 package com.orienteering.rest.demo.dto;
 
-import com.orienteering.rest.demo.Event;
-
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import javax.validation.constraints.Past;
 import java.util.Date;
 import java.util.List;
 
@@ -25,19 +18,19 @@ public class UserDTO {
 
     private String userBio;
 
-    private PhotographDTO userPhotograph;
+    private List<PhotographDTO> userPhotographs;
 
     public UserDTO() {
     }
 
-    public UserDTO(Long userId, String userEmail, String userFirstName, String userLastName, Date userDob, String userBio, PhotographDTO userPhotograph) {
+    public UserDTO(Long userId, String userEmail, String userFirstName, String userLastName, Date userDob, String userBio, List<PhotographDTO> userPhotographs) {
         this.userId = userId;
         this.userEmail = userEmail;
         this.userFirstName = userFirstName;
         this.userLastName = userLastName;
         this.userDob = userDob;
         this.userBio = userBio;
-        this.userPhotograph = userPhotograph;
+        this.userPhotographs = userPhotographs;
     }
 
     public Long getUserId() {
@@ -89,14 +82,13 @@ public class UserDTO {
         this.userBio = userBio;
     }
 
-    public PhotographDTO getUserPhotograph() {
-        return userPhotograph;
+    public List<PhotographDTO> getUserPhotographs() {
+        return userPhotographs;
     }
 
-    public void setUserPhotograph(PhotographDTO userPhotograph) {
-        this.userPhotograph = userPhotograph;
+    public void setUserPhotographs(List<PhotographDTO> userPhotographs) {
+        this.userPhotographs = userPhotographs;
     }
-
 
     @Override
     public String toString() {
@@ -107,7 +99,7 @@ public class UserDTO {
                 ", userLastName='" + userLastName + '\'' +
                 ", userDob=" + userDob +
                 ", userBio='" + userBio + '\'' +
-                ", userPhotograph=" + userPhotograph +
+                ", userPhotograph=" + userPhotographs +
                 '}';
     }
 }

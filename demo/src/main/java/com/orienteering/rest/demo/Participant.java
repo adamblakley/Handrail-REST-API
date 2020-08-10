@@ -10,7 +10,7 @@ import java.util.List;
 public class Participant {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer participantId;
 
     @ManyToOne(fetch = FetchType.LAZY)

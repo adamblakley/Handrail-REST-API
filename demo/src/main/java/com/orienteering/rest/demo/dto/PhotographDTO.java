@@ -11,6 +11,13 @@ public class PhotographDTO {
     private String photoName;
     // Photo filepath
     private String photoPath;
+    //
+    private Boolean isActive;
+
+    @Override
+    protected Object clone() throws CloneNotSupportedException {
+        return super.clone();
+    }
 
     /**
      * Default constructor
@@ -24,10 +31,11 @@ public class PhotographDTO {
      * @param photoName
      * @param photoPath
      */
-    public PhotographDTO(Long photoId, String photoName, String photoPath) {
+    public PhotographDTO(Long photoId, String photoName, String photoPath, Boolean isActive) {
         this.photoId = photoId;
         this.photoName = photoName;
         this.photoPath = photoPath;
+        this.isActive=isActive;
     }
 
     public Long getPhotoId() {
@@ -54,16 +62,21 @@ public class PhotographDTO {
         this.photoPath = photoPath;
     }
 
-    /**
-     * To String
-     * @return
-     */
+    public Boolean getActive() {
+        return isActive;
+    }
+
+    public void setActive(Boolean active) {
+        isActive = active;
+    }
+
     @Override
     public String toString() {
         return "PhotographDTO{" +
                 "photoId=" + photoId +
                 ", photoName='" + photoName + '\'' +
                 ", photoPath='" + photoPath + '\'' +
+                ", isActive=" + isActive +
                 '}';
     }
 }

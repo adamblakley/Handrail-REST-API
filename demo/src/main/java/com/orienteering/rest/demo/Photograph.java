@@ -9,13 +9,14 @@ import javax.persistence.*;
 public class Photograph<T> {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long photoId;
     private String photoName;
     private String photoPath;
+    private Boolean isActive;
 
     @JsonBackReference
-    @OneToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "referenceId")
     protected T entity;
 
@@ -49,6 +50,14 @@ public class Photograph<T> {
 
     public void setPhotoPath(String photoPath) {
         this.photoPath = photoPath;
+    }
+
+    public Boolean getActive() {
+        return isActive;
+    }
+
+    public void setActive(Boolean active) {
+        isActive = active;
     }
 
     @Override

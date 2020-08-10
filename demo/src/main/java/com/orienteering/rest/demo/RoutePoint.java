@@ -8,7 +8,7 @@ import javax.persistence.*;
 public class RoutePoint {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer routePointId;
 
     @JsonBackReference

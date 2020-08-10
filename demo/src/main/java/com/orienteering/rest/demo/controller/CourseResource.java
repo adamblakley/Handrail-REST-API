@@ -2,10 +2,8 @@ package com.orienteering.rest.demo.controller;
 
 import com.orienteering.rest.demo.*;
 import com.orienteering.rest.demo.dto.CourseDTO;
-import com.orienteering.rest.demo.dto.EventDTO;
 import com.orienteering.rest.demo.security.models.UserPrincipal;
 import com.orienteering.rest.demo.service.CourseService;
-import com.orienteering.rest.demo.service.EventService;
 import com.orienteering.rest.demo.service.ImageUploadService;
 import com.orienteering.rest.demo.service.UserService;
 import org.modelmapper.ModelMapper;
@@ -84,9 +82,10 @@ public class CourseResource {
                         ControlPhotograph photograph = new ControlPhotograph();
                         photograph.setPhotoPath(imageUploadResponse.getFilepath());
                         photograph.setPhotoName(file.getOriginalFilename());
+                        photograph.setActive(true);
                         photograph.setEntity(control);
-                        control.setControlPhotograph(photograph);
-                        control.getControlPhotograph().setPhotoPath(imageUploadResponse.getFilepath());
+                        control.setControlPhotographs(new ArrayList<ControlPhotograph>());
+                        control.getControlPhotographs().add(photograph);
                     }
                 }
             }

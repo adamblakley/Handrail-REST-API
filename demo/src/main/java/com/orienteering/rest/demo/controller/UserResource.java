@@ -3,21 +3,23 @@ package com.orienteering.rest.demo.controller;
 
 import com.orienteering.rest.demo.*;
 import com.orienteering.rest.demo.dto.UserDTO;
+import com.orienteering.rest.demo.security.models.UserPrincipal;
+import com.orienteering.rest.demo.security.payloads.PasswordUpdateRequest;
 import com.orienteering.rest.demo.service.ImageUploadService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-import com.orienteering.rest.demo.repository.UserRepository;
 import com.orienteering.rest.demo.service.UserService;
 
 import javax.validation.Valid;
-import java.awt.*;
-import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -27,6 +29,12 @@ public class UserResource {
 
     @Autowired
     UserService userService;
+
+    @Autowired
+    AuthenticationManager authenticationManager;
+
+    @Autowired
+    PasswordEncoder passwordEncoder;
 
     @Autowired
     private ModelMapper modelMapper;
@@ -62,6 +70,29 @@ public class UserResource {
         return ids;
     }
 
+    @PutMapping("/users/{id}/update/password")
+    public ResponseEntity<StatusResponseEntity<?>> updateUserPassword(@PathVariable Long id, @Valid @RequestBody PasswordUpdateRequest request){
+
+        Object prinicipal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        if (prinicipal instanceof UserPrincipal){
+            if (((UserPrincipal) prinicipal).getId().equals(id)){
+                User user = userService.findUser(id);
+                if (passwordEncoder.matches(request.getCurrentPassword(),user.getUserPassword())){
+                    user.setUserPassword(passwordEncoder.encode(request.getNewPassword()));
+                    userService.saveUser(user);
+                    return new ResponseEntity( new StatusResponseEntity(true, "Password Update Successful",convertToDto(user)), HttpStatus.OK);
+                } else {
+                    return new ResponseEntity( new StatusResponseEntity(false, "Password Incorrect",false), HttpStatus.UNAUTHORIZED);
+                }
+            } else {
+                return new ResponseEntity( new StatusResponseEntity(false, "Unauthorized Request",false), HttpStatus.FORBIDDEN);
+            }
+        } else {
+            return new ResponseEntity( new StatusResponseEntity(false, "Service Unavailable",false), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
     @PutMapping("/users/{id}/update")
     public ResponseEntity<StatusResponseEntity<?>> updateUser(@PathVariable Long id, @Valid @RequestPart("user") UserDTO user, @RequestParam(value ="file", required=false) MultipartFile file){
         User foundUser = userService.findUser(id);
@@ -89,8 +120,18 @@ public class UserResource {
                 UserPhotograph photograph = new UserPhotograph();
                 photograph.setPhotoName(file.getOriginalFilename());
                 photograph.setPhotoPath(imageUploadResponse.getFilepath());
+                photograph.setActive(true);
                 photograph.setEntity(foundUser);
-                foundUser.setUserPhotograph(photograph);
+
+                if (foundUser.getUserPhotographs()==null){
+                    foundUser.setUserPhotographs(new ArrayList<UserPhotograph>());
+                }
+
+                for (Photograph photographThru : foundUser.getUserPhotographs()){
+                    photographThru.setActive(false);
+                }
+
+                foundUser.getUserPhotographs().add(photograph);
             } else {
                 userService.saveUser(foundUser);
                 UserDTO userDTO = convertToDto(foundUser);

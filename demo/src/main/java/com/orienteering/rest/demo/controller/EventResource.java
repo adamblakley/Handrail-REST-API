@@ -12,12 +12,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.parameters.P;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -114,8 +114,10 @@ public class EventResource {
             EventPhotograph photograph = new EventPhotograph();
             photograph.setPhotoName(file.getOriginalFilename());
             photograph.setPhotoPath(imageUploadResponse.getFilepath());
+            photograph.setActive(true);
             photograph.setEntity(event);
-            event.setEventPhotograph(photograph);
+            event.setEventPhotographs(new ArrayList<EventPhotograph>());
+            event.getEventPhotographs().add(photograph);
             event.setEventStatus(1);
             event.setActive(true);
             event.setEventCreated(Calendar.getInstance().getTime());

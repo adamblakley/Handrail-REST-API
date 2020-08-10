@@ -1,6 +1,5 @@
 package com.orienteering.rest.demo;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.orienteering.rest.demo.dto.ParticipantControlPerformanceDTO;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -10,7 +9,7 @@ import java.util.List;
 public class Event {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer eventID;
     private String eventName;
     private Date eventCreated;
@@ -33,8 +32,8 @@ public class Event {
     private List<Participant> participants;
 
     @JsonManagedReference
-    @OneToOne(mappedBy = "entity", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private EventPhotograph eventPhotograph;
+    @OneToMany(mappedBy = "entity", cascade = CascadeType.ALL)
+    private List<EventPhotograph> eventPhotographs;
 
     private boolean isActive;
 
@@ -123,12 +122,12 @@ public class Event {
         this.participants.add(participant);
     }
 
-    public EventPhotograph getEventPhotograph() {
-        return eventPhotograph;
+    public List<EventPhotograph> getEventPhotographs() {
+        return eventPhotographs;
     }
 
-    public void setEventPhotograph(EventPhotograph eventPhotograph) {
-        this.eventPhotograph = eventPhotograph;
+    public void setEventPhotographs(List<EventPhotograph> eventPhotographs) {
+        this.eventPhotographs = eventPhotographs;
     }
 
     public boolean isActive() {
@@ -149,7 +148,7 @@ public class Event {
                 ", eventNote='" + eventNote + '\'' +
                 ", eventStatus=" + eventStatus +
                 ", eventCourse=" + eventCourse +
-                ", eventPhotograph=" + eventPhotograph +
+                ", eventPhotographs=" + eventPhotographs +
                 '}';
     }
 }

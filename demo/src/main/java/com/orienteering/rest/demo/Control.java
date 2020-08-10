@@ -1,6 +1,7 @@
 package com.orienteering.rest.demo;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import javax.persistence.*;
 import java.util.List;
@@ -9,7 +10,7 @@ import java.util.List;
 public class Control {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer controlId;
     private Integer controlPosition;
     private String controlName;
@@ -24,8 +25,9 @@ public class Control {
     @ManyToOne(fetch = FetchType.EAGER)
     private Course controlCourse;
 
-    @OneToOne(mappedBy = "entity", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private ControlPhotograph controlPhotograph;
+    @JsonManagedReference
+    @OneToMany(mappedBy = "entity", cascade = CascadeType.ALL)
+    private List<ControlPhotograph> controlPhotographs;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "pcpControl", cascade = CascadeType.ALL)
     private List<ParticipantControlPerformance> participantControlPerformances;
@@ -122,12 +124,12 @@ public class Control {
         this.participantControlPerformances = participantControlPerformances;
     }
 
-    public ControlPhotograph getControlPhotograph() {
-        return controlPhotograph;
+    public List<ControlPhotograph> getControlPhotographs() {
+        return controlPhotographs;
     }
 
-    public void setControlPhotograph(ControlPhotograph controlPhotograph) {
-        this.controlPhotograph = controlPhotograph;
+    public void setControlPhotographs(List<ControlPhotograph> controlPhotographs) {
+        this.controlPhotographs = controlPhotographs;
     }
 
     @Override
@@ -142,7 +144,7 @@ public class Control {
                 ", controlLongitude=" + controlLongitude +
                 ", controlAltitude=" + controlAltitude +
                 ", controlCompleted=" + controlCompleted +
-                ", controlPhotograph=" + controlPhotograph +
+                ", controlPhotograph=" + controlPhotographs +
                 '}';
     }
 }

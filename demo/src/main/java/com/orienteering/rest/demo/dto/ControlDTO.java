@@ -1,5 +1,7 @@
 package com.orienteering.rest.demo.dto;
 
+import java.util.List;
+
 public class ControlDTO {
 
     private Integer controlId;
@@ -11,12 +13,12 @@ public class ControlDTO {
     private Double controlLongitude;
     private Double controlAltitude;
 
-    private PhotographDTO controlPhotograph;
+    private List<PhotographDTO> controlPhotographs;
 
     public ControlDTO() {
     }
 
-    public ControlDTO(Integer controlId, String controlName, String controlNote, String controlTime, Double controlLatitude, Double controlLongitude, Double controlAltitude, PhotographDTO controlPhotograph) {
+    public ControlDTO(Integer controlId, String controlName, String controlNote, String controlTime, Double controlLatitude, Double controlLongitude, Double controlAltitude, List<PhotographDTO> controlPhotographs) {
         this.controlId = controlId;
         this.controlName = controlName;
         this.controlNote = controlNote;
@@ -24,7 +26,7 @@ public class ControlDTO {
         this.controlLatitude = controlLatitude;
         this.controlLongitude = controlLongitude;
         this.controlAltitude = controlAltitude;
-        this.controlPhotograph = controlPhotograph;
+        this.controlPhotographs = controlPhotographs;
     }
 
     public Integer getControlPosition() {
@@ -91,13 +93,9 @@ public class ControlDTO {
         this.controlAltitude = controlAltitude;
     }
 
-    public PhotographDTO getControlPhotograph() {
-        return controlPhotograph;
-    }
+    public List<PhotographDTO> getControlPhotographs() { return controlPhotographs; }
 
-    public void setControlPhotograph(PhotographDTO controlPhotograph) {
-        this.controlPhotograph = controlPhotograph;
-    }
+    public void setControlPhotographs(List<PhotographDTO> controlPhotographs) { this.controlPhotographs = controlPhotographs; }
 
     @Override
     public String toString() {
@@ -110,7 +108,7 @@ public class ControlDTO {
                 ", controlLatitude=" + controlLatitude +
                 ", controlLongitude=" + controlLongitude +
                 ", controlAltitude=" + controlAltitude +
-                ", controlPhotograph=" + controlPhotograph +
+                ", controlPhotograph=" + controlPhotographs +
                 '}';
     }
 }

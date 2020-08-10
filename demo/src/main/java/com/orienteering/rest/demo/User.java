@@ -1,6 +1,6 @@
 package com.orienteering.rest.demo;
 
-import org.hibernate.annotations.NaturalId;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import javax.persistence.*;
 import javax.validation.constraints.Past;
@@ -13,7 +13,7 @@ import java.util.Set;
 public class User {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long userId;
 
     private Date userCreated;
@@ -42,8 +42,9 @@ public class User {
     @OneToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL,mappedBy = "courseUser")
     private List<Course> courses;
 
-    @OneToOne(mappedBy = "entity", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private UserPhotograph userPhotograph;
+    @JsonManagedReference
+    @OneToMany(mappedBy = "entity", cascade = CascadeType.ALL)
+    private List<UserPhotograph> userPhotographs;
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinColumn(name = "role_id")
@@ -177,13 +178,9 @@ public class User {
         this.userRoles = userRoles;
     }
 
-    public UserPhotograph getUserPhotograph() {
-        return userPhotograph;
-    }
+    public List<UserPhotograph> getUserPhotographs() { return userPhotographs; }
 
-    public void setUserPhotograph(UserPhotograph userPhotograph) {
-        this.userPhotograph = userPhotograph;
-    }
+    public void setUserPhotographs(List<UserPhotograph> userPhotographs) { this.userPhotographs = userPhotographs; }
 
     @Override
     public String toString() {
@@ -197,7 +194,7 @@ public class User {
                 ", userDob=" + userDob +
                 ", userBio='" + userBio + '\'' +
                 ", userType=" + userType +
-                ", userPhotograph=" + userPhotograph +
+                ", userPhotograph=" + userPhotographs +
                 ", userRoles=" + userRoles +
                 '}';
     }

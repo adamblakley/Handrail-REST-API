@@ -9,7 +9,7 @@ import javax.persistence.*;
 public class ParticipantControlPerformance {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer pcpId;
 
     private Long controlTime;

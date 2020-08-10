@@ -16,7 +16,7 @@ public class Role {
      * Generated Id
      */
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer roleId;
 
     /**
