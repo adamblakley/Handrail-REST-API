@@ -50,9 +50,10 @@ public class EventResource {
     }
 
     @GetMapping("/events/{id}")
-    public EventDTO retrieveEvents(@PathVariable Integer id){
+    public ResponseEntity<StatusResponseEntity<?>> retrieveEvents(@PathVariable Integer id){
         Event event = eventService.findEvent(id);
-        return convertToDto(event);
+        EventDTO eventDto = convertToDto(event);
+        return new ResponseEntity( new StatusResponseEntity(true, "Event Update Successful",eventDto), HttpStatus.OK);
     }
 
     @GetMapping("/users/{id}/events")
