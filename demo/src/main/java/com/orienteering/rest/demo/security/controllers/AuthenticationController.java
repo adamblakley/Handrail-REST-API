@@ -53,17 +53,12 @@ public class AuthenticationController {
      */
     @PostMapping("/login")
     public ResponseEntity<StatusResponseEntity<?>> authenticateUser(@Valid @RequestBody LoginRequest loginRequest){
-        Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        loginRequest.getUserEmail(),
-                        loginRequest.getPassword()
-                )
-        );
-            SecurityContextHolder.getContext().setAuthentication(authentication);
-            String jwt = jwtTokenProvider.generateToken(authentication);
-            Object obj = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-            UserPrincipal user = (UserPrincipal) obj;
-            return  new ResponseEntity( new StatusResponseEntity(true, "User login successful",new JwtAuthenticationResponse(jwt,user.getId())),HttpStatus.OK);
+        Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getUserEmail(), loginRequest.getPassword()));
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        String jwt = jwtTokenProvider.generateToken(authentication);
+        Object obj = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        UserPrincipal user = (UserPrincipal) obj;
+        return  new ResponseEntity( new StatusResponseEntity(true, "User login successful",new JwtAuthenticationResponse(jwt,user.getId())),HttpStatus.OK);
 
     }
 
@@ -78,7 +73,7 @@ public class AuthenticationController {
         if (prinicipal instanceof UserPrincipal && checkLogin((UserPrincipal)prinicipal)){
             return new ResponseEntity(new StatusResponseEntity(true, "User logged in", true),HttpStatus.OK);
         }
-        return new ResponseEntity(new StatusResponseEntity(false, "User not logged in", false),HttpStatus.OK);
+        return new ResponseEntity(new StatusResponseEntity(false, "User not logged in", false),HttpStatus.FORBIDDEN);
     }
 
 

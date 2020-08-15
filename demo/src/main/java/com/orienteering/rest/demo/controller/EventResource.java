@@ -106,8 +106,8 @@ public class EventResource {
 
     @Transactional
     @PostMapping("/users/{id}/events")
+    @ResponseBody
     public ResponseEntity<StatusResponseEntity<EventDTO>> createEvent(@PathVariable Long id, @Valid @RequestPart("event")EventDTO eventDto, @RequestParam("file")MultipartFile file){
-        System.out.println(file.getResource().getFilename());
         ImageUploadResponse imageUploadResponse = uploadEventPhotograph(file);
 
         if (imageUploadResponse.getSuccess()) {

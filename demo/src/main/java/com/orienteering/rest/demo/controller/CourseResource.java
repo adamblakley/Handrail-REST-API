@@ -52,6 +52,7 @@ public class CourseResource {
 
     @GetMapping("/users/{id}/courses")
     public ResponseEntity<StatusResponseEntity<List<CourseDTO>>> findCoursesByUser(@PathVariable Long id){
+        System.out.println("BADBADBAD");
         User user = userService.findUser(id);
         List<Course> courses = courseService.findCoursesByUser(user);
         return new ResponseEntity( new StatusResponseEntity(true, "Course Found",courses.stream().map(this::convertToDto).collect(Collectors.toList())), HttpStatus.OK);

@@ -83,10 +83,10 @@ public class UserResource {
                     userService.saveUser(user);
                     return new ResponseEntity( new StatusResponseEntity(true, "Password Update Successful",convertToDto(user)), HttpStatus.OK);
                 } else {
-                    return new ResponseEntity( new StatusResponseEntity(false, "Password Incorrect",false), HttpStatus.UNAUTHORIZED);
+                    return new ResponseEntity( new StatusResponseEntity(true, "Password Incorrect",false), HttpStatus.FORBIDDEN);
                 }
             } else {
-                return new ResponseEntity( new StatusResponseEntity(false, "Unauthorized Request",false), HttpStatus.FORBIDDEN);
+                return new ResponseEntity( new StatusResponseEntity(false, "Unauthorized Request",false), HttpStatus.UNAUTHORIZED);
             }
         } else {
             return new ResponseEntity( new StatusResponseEntity(false, "Service Unavailable",false), HttpStatus.INTERNAL_SERVER_ERROR);
@@ -94,7 +94,31 @@ public class UserResource {
     }
 
     @PutMapping("/users/{id}/update")
-    public ResponseEntity<StatusResponseEntity<?>> updateUser(@PathVariable Long id, @Valid @RequestPart("user") UserDTO user, @RequestParam(value ="file", required=false) MultipartFile file){
+    public ResponseEntity<StatusResponseEntity<?>> updateUser(@PathVariable Long id, @Valid @RequestBody UserDTO user){
+        User foundUser = userService.findUser(id);
+
+        if (user.getUserFirstName()!=null){
+            foundUser.setUserFirstName(user.getUserFirstName());
+        }
+        if (user.getUserLastName()!=null){
+            foundUser.setUserLastName(user.getUserLastName());
+        }
+        if (user.getUserEmail()!=null){
+            foundUser.setUserEmail(user.getUserEmail());
+        }
+        if (user.getUserDob()!=null){
+            foundUser.setUserDob(user.getUserDob());
+        }
+        if (user.getUserBio()!=null){
+            foundUser.setUserBio(user.getUserBio());
+        }
+        userService.saveUser(foundUser);
+        UserDTO userDTO = convertToDto(foundUser);
+        return new ResponseEntity( new StatusResponseEntity(true, "User Update Successful",userDTO), HttpStatus.OK);
+    }
+
+    @PostMapping("/users/{id}/update")
+    public ResponseEntity<StatusResponseEntity<?>> updateUserWPhoto(@PathVariable Long id, @Valid @RequestPart("user") UserDTO user, @RequestPart(value ="file", required=false) MultipartFile file){
         User foundUser = userService.findUser(id);
 
         if (user.getUserFirstName()!=null){
