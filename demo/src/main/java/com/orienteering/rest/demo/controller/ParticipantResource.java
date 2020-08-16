@@ -39,7 +39,7 @@ public class ParticipantResource {
     ModelMapper modelMapper;
 
     @GetMapping("/events/{id}/participants")
-    public List<ParticipantDTO> retrieveAllParticipants(@PathVariable Integer id){
+    public ResponseEntity<StatusResponseEntity<?>> retrieveAllParticipants(@PathVariable Integer id){
 
         Event event = eventService.findEvent(id);
 
@@ -54,11 +54,11 @@ public class ParticipantResource {
 
         ArrayList<Participant> participants = new ArrayList<Participant>(event.getParticipants());
         Collections.sort(participants,participantComparator);
-        return participants.stream().map(this::convertToDto).collect(Collectors.toList());
+        return new ResponseEntity( new StatusResponseEntity(true, "Participants found",participants.stream().map(this::convertToDto).collect(Collectors.toList())), HttpStatus.OK);
     }
 
     @GetMapping("/events/{id}/participants/top5")
-    public List<ParticipantDTO> retrieveTop5Participants(@PathVariable Integer id){
+    public ResponseEntity<StatusResponseEntity<?>> retrieveTop5Participants(@PathVariable Integer id){
 
         Event event = eventService.findEvent(id);
 
@@ -75,13 +75,15 @@ public class ParticipantResource {
         Collections.sort(participants, participantComparator);
         ArrayList<Participant> topParticipants = (ArrayList<Participant>)participants.subList(0,5);
 
-        return topParticipants.stream().map(this::convertToDto).collect(Collectors.toList());
+        return new ResponseEntity( new StatusResponseEntity(true, "Top participants found",topParticipants.stream().map(this::convertToDto).collect(Collectors.toList())), HttpStatus.OK);
+
     }
 
     @GetMapping("/participants/{id}")
-    public ParticipantDTO retrieveParticipant(@PathVariable Integer id){
+    public ResponseEntity<StatusResponseEntity<?>>retrieveParticipant(@PathVariable Integer id){
         Participant participant = participantService.findParticipant(id);
-        return convertToDto(participant);
+        return new ResponseEntity( new StatusResponseEntity(true, "Participant found",convertToDto(participant)), HttpStatus.OK);
+
     }
 
     @GetMapping("/events/{eventId}/users/{userId}/participants")

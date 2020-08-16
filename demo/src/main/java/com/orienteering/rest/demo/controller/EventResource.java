@@ -19,6 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -44,6 +45,7 @@ public class EventResource {
         if (events.isEmpty()){
             return new ResponseEntity( new StatusResponseEntity(false, "No Events Available",false), HttpStatus.NOT_FOUND);
         } else {
+            events.sort(Comparator.comparing(Event::getEventDate));
             return new ResponseEntity( new StatusResponseEntity(true, "Events Found",events.stream().map(this::convertToDto).collect(Collectors.toList())), HttpStatus.OK);
         }
 
