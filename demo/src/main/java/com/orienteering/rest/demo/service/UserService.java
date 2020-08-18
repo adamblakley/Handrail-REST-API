@@ -1,9 +1,8 @@
 package com.orienteering.rest.demo.service;
 
-import com.orienteering.rest.demo.User;
+import com.orienteering.rest.demo.model.User;
 import com.orienteering.rest.demo.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

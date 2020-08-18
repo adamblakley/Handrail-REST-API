@@ -1,7 +1,7 @@
 package com.orienteering.rest.demo.service;
 
 
-import com.orienteering.rest.demo.ParticipantControlPerformance;
+import com.orienteering.rest.demo.model.ParticipantControlPerformance;
 
 import com.orienteering.rest.demo.repository.ParticipantControlPerformanceRepository;
 import org.springframework.beans.factory.annotation.Autowired;

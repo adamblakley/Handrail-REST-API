@@ -1,9 +1,7 @@
 package com.orienteering.rest.demo.service;
 
-import com.orienteering.rest.demo.Control;
-import com.orienteering.rest.demo.Event;
+import com.orienteering.rest.demo.model.Control;
 import com.orienteering.rest.demo.repository.ControlRepository;
-import com.orienteering.rest.demo.repository.EventRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

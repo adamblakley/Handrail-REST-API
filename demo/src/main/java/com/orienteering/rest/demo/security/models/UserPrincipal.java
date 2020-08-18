@@ -1,7 +1,7 @@
 package com.orienteering.rest.demo.security.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.orienteering.rest.demo.User;
+import com.orienteering.rest.demo.model.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -10,13 +10,15 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 /**
- * UserPrincipal returned from UserDetailsService
- * Information store for authentication/authorization
+ * UserPrincipal class returned from the CustomUserDetailsService
+ * Acts as the information storage for authentication and authorization
  */
 public class UserPrincipal implements UserDetails {
 
     /**
-     * variables
+     * id, username and email associated with a user
+     * Password string with Json Ignored
+     * Authority collection extending from GrandtedAuthority of Spring Security Framework
      */
     private Long id;
     private String username;
@@ -82,7 +84,7 @@ public class UserPrincipal implements UserDetails {
     }
 
     /**
-     *
+     * Create a new user principal from a user class
      * @param user
      * @return
      */
@@ -97,25 +99,25 @@ public class UserPrincipal implements UserDetails {
     }
 
     /**
-     * returns boolean if passed object == to this
-     * @param o
+     * returns boolean value checks object passed is an implementation of userprincipal
+     * @param object
      * @return
      */
     @Override
-    public boolean equals(Object o){
-        if (this==o) {
+    public boolean equals(Object object){
+        if (this==object) {
             return true;
-        } else if (o==null || getClass() !=o.getClass()){
+        } else if (object==null || getClass() !=object.getClass()){
             return false;
         } else {
-            //cast o to UserPrincipal, compare id
-            UserPrincipal userPrin = (UserPrincipal) o;
-            return Objects.equals(id, userPrin.id);
+            // casts the object to a user principle
+            UserPrincipal userPrinciple = (UserPrincipal) object;
+            return Objects.equals(id, userPrinciple.id);
         }
     }
 
     /**
-     * return hash id
+     * returns id hashed
      * @return
      */
     @Override

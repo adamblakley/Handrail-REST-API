@@ -1,17 +1,17 @@
 package com.orienteering.rest.demo.security.controllers;
 
-import com.orienteering.rest.demo.ERole;
-import com.orienteering.rest.demo.Role;
-import com.orienteering.rest.demo.StatusResponseEntity;
-import com.orienteering.rest.demo.User;
+import com.orienteering.rest.demo.model.ERole;
+import com.orienteering.rest.demo.model.Role;
+import com.orienteering.rest.demo.model.StatusResponseEntity;
+import com.orienteering.rest.demo.model.User;
 import com.orienteering.rest.demo.repository.RoleRepository;
 import com.orienteering.rest.demo.repository.UserRepository;
 import com.orienteering.rest.demo.security.JwtTokenProvider;
-import com.orienteering.rest.demo.security.exceptions.AppException;
+import com.orienteering.rest.demo.security.exceptions.InternalServerException;
 import com.orienteering.rest.demo.security.models.UserPrincipal;
-import com.orienteering.rest.demo.security.payloads.JwtAuthenticationResponse;
-import com.orienteering.rest.demo.security.payloads.LoginRequest;
-import com.orienteering.rest.demo.security.payloads.SignUpRequest;
+import com.orienteering.rest.demo.security.responses.JwtAuthenticationResponse;
+import com.orienteering.rest.demo.security.models.LoginRequest;
+import com.orienteering.rest.demo.security.models.SignUpRequest;
 import com.orienteering.rest.demo.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -29,6 +29,9 @@ import javax.validation.Valid;
 import java.net.URI;
 import java.util.Collections;
 
+/**
+ * Class handles the authentication endpoints and logic for user signup, login and login status
+ */
 @RestController
 @RequestMapping("/authentication")
 public class AuthenticationController {
@@ -47,7 +50,7 @@ public class AuthenticationController {
     JwtTokenProvider jwtTokenProvider;
 
     /**
-     * Login post mapping returns jwt token as response
+     * Login post mapping returns a jwt authentication response
      * @param loginRequest
      * @return
      */
@@ -63,7 +66,7 @@ public class AuthenticationController {
     }
 
     /**
-     * Check if user is logged in
+     * Check if the user is logged in
      * @param httpServletRequest
      * @return
      */
@@ -73,7 +76,7 @@ public class AuthenticationController {
         if (prinicipal instanceof UserPrincipal && checkLogin((UserPrincipal)prinicipal)){
             return new ResponseEntity(new StatusResponseEntity(true, "User logged in", true),HttpStatus.OK);
         }
-        return new ResponseEntity(new StatusResponseEntity(false, "User not logged in", false),HttpStatus.FORBIDDEN);
+        return new ResponseEntity(new StatusResponseEntity(false, "User not logged in", false),HttpStatus.UNAUTHORIZED);
     }
 
 
@@ -102,7 +105,7 @@ public class AuthenticationController {
         } else {
             User user = new User(signUpRequest.getFirstName(),signUpRequest.getLastName(),signUpRequest.getEmail(),signUpRequest.getPassword(),signUpRequest.getUserDob(),signUpRequest.getUserBio());
             user.setUserPassword(passwordEncoder.encode(user.getUserPassword()));
-            Role role = roleRepository.findByRole(ERole.ROLE_USER).orElseThrow(()->new AppException("Role not set"));
+            Role role = roleRepository.findByRole(ERole.ROLE_USER).orElseThrow(()->new InternalServerException("Role not set"));
             user.setUserRoles(Collections.singleton(role));
             User savedUser = userService.saveUser(user);
             URI location = ServletUriComponentsBuilder.fromCurrentContextPath().path("/users/{id}").buildAndExpand(savedUser.getUserId()).toUri();

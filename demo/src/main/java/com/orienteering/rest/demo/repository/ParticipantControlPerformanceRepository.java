@@ -1,6 +1,6 @@
 package com.orienteering.rest.demo.repository;
 
-import com.orienteering.rest.demo.ParticipantControlPerformance;
+import com.orienteering.rest.demo.model.ParticipantControlPerformance;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

@@ -1,7 +1,7 @@
 package com.orienteering.rest.demo.service;
 
-import com.orienteering.rest.demo.ImageUploadProperties;
-import com.orienteering.rest.demo.ImageUploadResponse;
+import com.orienteering.rest.demo.model.ImageUploadProperties;
+import com.orienteering.rest.demo.model.ImageUploadResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;

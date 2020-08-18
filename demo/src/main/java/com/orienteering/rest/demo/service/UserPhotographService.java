@@ -1,7 +1,7 @@
 package com.orienteering.rest.demo.service;
 
 
-import com.orienteering.rest.demo.UserPhotograph;
+import com.orienteering.rest.demo.model.UserPhotograph;
 import com.orienteering.rest.demo.repository.UserPhotographRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

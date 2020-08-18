@@ -1,8 +1,6 @@
 package com.orienteering.rest.demo.dto;
 
 
-import com.orienteering.rest.demo.User;
-
 import java.util.Date;
 import java.util.List;
 

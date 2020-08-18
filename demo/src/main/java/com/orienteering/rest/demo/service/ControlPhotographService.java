@@ -1,6 +1,6 @@
 package com.orienteering.rest.demo.service;
 
-import com.orienteering.rest.demo.ControlPhotograph;
+import com.orienteering.rest.demo.model.ControlPhotograph;
 import com.orienteering.rest.demo.repository.ControlPhotographRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;

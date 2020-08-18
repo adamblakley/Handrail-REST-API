@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 import java.util.Date;
 
 /**
- * Geneate JWT and check received JWT
+ * Support class to generate a JWt and check a passed JWT
  */
 @Component
 public class JwtTokenProvider {
@@ -19,19 +19,19 @@ public class JwtTokenProvider {
     private static final Logger logger = LoggerFactory.getLogger(JwtTokenProvider.class);
 
     /**
-     * JWTSecret Application.properties
+     * JWTSecret resides within application.properties
      */
     @Value("${app.jwtSecret}")
     private String jwtSecret;
 
     /**
-     * JWTExpirationInMs Application.properties
+     * JWTExpirationInMs resides within application.properties
      */
     @Value("${app.jwtExpirationInMs}")
     private int jwtExpirationInMs;
 
     /**
-     * Generates token on request
+     * Generates token on a authenticated service request
      * @param authentication
      * @return
      */
@@ -49,7 +49,7 @@ public class JwtTokenProvider {
     }
 
     /**
-     * get user id from passed jwt
+     * get userId from a passed JWT string
      * @param token
      * @return
      */
@@ -62,7 +62,7 @@ public class JwtTokenProvider {
     }
 
     /**
-     * authenticate token on request
+     * authenticate token on request from the controller
      * @param authToken
      * @return
      */
@@ -71,15 +71,15 @@ public class JwtTokenProvider {
             Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(authToken);
             return true;
         } catch (SignatureException s){
-            logger.error("Invalid token signature");
+            logger.error("Error: Invalid token signature");
         } catch (MalformedJwtException m){
-            logger.error("Invalid token");
+            logger.error("Error: Invalid token passed");
         } catch (ExpiredJwtException e){
-            logger.error("Expired token");
+            logger.error("Error: The token has expired");
         } catch (UnsupportedJwtException u){
-            logger.error("Unsupport token");
+            logger.error("Error: The token is unsupported type");
         } catch (IllegalArgumentException i){
-            logger.error("Token string unrecognised");
+            logger.error("Error: Unrecognized token string");
         }
         return false;
     }

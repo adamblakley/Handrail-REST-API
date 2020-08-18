@@ -1,7 +1,7 @@
 package com.orienteering.rest.demo.repository;
 
-import com.orienteering.rest.demo.ERole;
-import com.orienteering.rest.demo.Role;
+import com.orienteering.rest.demo.model.ERole;
+import com.orienteering.rest.demo.model.Role;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

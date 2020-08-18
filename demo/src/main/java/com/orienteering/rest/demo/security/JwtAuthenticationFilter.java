@@ -17,24 +17,25 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+
 /**
- * Authentication Filter, filters requests before service access
+ * Extension of OncePerRequestFilter, authentication filter to filter requests before processing by the service
  */
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
+    // Token provider for JWT
     @Autowired
     private JwtTokenProvider jwtTokenProvider;
 
+    // Spring Security UserDetailsService
     @Autowired
     private CustomUserDetailsService customUserDetailsService;
 
-    /**
-     * Logger
-     */
+    // Logger object to log errors
     private static final Logger logger= LoggerFactory.getLogger(JwtAuthenticationFilter.class);
 
     /**
-     * get jwt from authorization header in request
+     * Grab the jwt from the authorization header within the request
      * @param httpServletRequest
      * @return
      */
@@ -48,7 +49,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     }
 
     /**
-     * get user id from header string representation of jwt, set authentication in security context, continue filter
+     * Get the userId from from the JWT Header and set the authentication in the security context before proceeding through filter
      * @param httpServletRequest
      * @param httpServletResponse
      * @param filterChain
@@ -59,7 +60,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, FilterChain filterChain) throws ServletException, IOException {
         try{
             String jwt = getJwtFromRequest(httpServletRequest);
-            System.out.println("VALIDATING TOKEN");
             if(StringUtils.hasText(jwt) && jwtTokenProvider.validateToken(jwt)){
                 Long userId = jwtTokenProvider.getUserIdFromJWT(jwt);
 
@@ -69,7 +69,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 SecurityContextHolder.getContext().setAuthentication(authenticationToken);
             }
         }catch (Exception e){
-            logger.error("Unable to set authentication in security", e);
+            logger.error("Unable to set the requested authentication in security", e);
         }
         filterChain.doFilter(httpServletRequest,httpServletResponse);
     }

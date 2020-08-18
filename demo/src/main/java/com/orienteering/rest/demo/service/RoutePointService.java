@@ -1,7 +1,6 @@
 package com.orienteering.rest.demo.service;
 
-import com.orienteering.rest.demo.ParticipantControlPerformance;
-import com.orienteering.rest.demo.RoutePoint;
+import com.orienteering.rest.demo.model.RoutePoint;
 import com.orienteering.rest.demo.repository.RoutePointRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

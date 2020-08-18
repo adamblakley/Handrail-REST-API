@@ -5,11 +5,10 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import java.lang.annotation.*;
 
 /**
- * AuthenticationPrincipal wrapper
+ * Wrapper for authentication principal
  */
-@Target({ElementType.PARAMETER,ElementType.TYPE})
+@Target({ElementType.PARAMETER, ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 @AuthenticationPrincipal
-public @interface CurrentUser {
-}
+public @interface CurrentUser { }

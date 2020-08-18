@@ -1,6 +1,6 @@
 package com.orienteering.rest.demo.security.services;
 
-import com.orienteering.rest.demo.User;
+import com.orienteering.rest.demo.model.User;
 import com.orienteering.rest.demo.repository.UserRepository;
 import com.orienteering.rest.demo.security.models.UserPrincipal;
 import org.springframework.beans.factory.annotation.Autowired;

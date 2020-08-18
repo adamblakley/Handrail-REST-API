@@ -1,9 +1,8 @@
 package com.orienteering.rest.demo.service;
 
-import com.orienteering.rest.demo.EventPhotograph;
+import com.orienteering.rest.demo.model.EventPhotograph;
 import com.orienteering.rest.demo.repository.EventPhotographRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;

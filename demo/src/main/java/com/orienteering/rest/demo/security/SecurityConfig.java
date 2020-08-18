@@ -24,20 +24,16 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableGlobalMethodSecurity(securedEnabled = true, jsr250Enabled = true, prePostEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-    /***
-     * user to collect user details for authorization check
-     */
+    // service to collect user details for auth checking
     @Autowired
     CustomUserDetailsService customUserDetailsService;
 
-    /***
-     * return unauthorized error
-     */
+    // unauthorized error return
     @Autowired
     private JwtAuthenticationEntryPoint unauthorizedHandler;
 
     /***
-     * Filter to read in JWT token and validate, load user details and set
+     * Filter to read and validate the JWT token
      * @return
      */
     @Bean
@@ -46,7 +42,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     /***
-     * hash retrieved passwords
+     * encrypt the passwords using a BCryptPassword encoder
      * @return
      */
     @Bean
@@ -55,7 +51,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     /***
-     * configure authentication provider
+     * Configure the provided authentication provider with user details service and password encoder
      * @throws Exception
      */
     @Override
@@ -64,7 +60,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     /***
-     * create authentication provider
+     * create an authentication proivder using the authentication manager bean
      * @return
      * @throws Exception
      */
@@ -77,7 +73,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 
     /***
-     * configure http functions and rules
+     * configure the httpp rules and functions including exceptions to the filter chain such as the /authentication/ endpoints
      * @param http
      * @throws Exception
      */

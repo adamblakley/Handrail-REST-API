@@ -1,10 +1,8 @@
 package com.orienteering.rest.demo.service;
 
-import com.orienteering.rest.demo.Course;
-import com.orienteering.rest.demo.Event;
-import com.orienteering.rest.demo.User;
+import com.orienteering.rest.demo.model.Course;
+import com.orienteering.rest.demo.model.User;
 import com.orienteering.rest.demo.repository.CourseRepository;
-import com.orienteering.rest.demo.repository.EventRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

@@ -12,18 +12,17 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 /***
- * respond to unauthorized access
+ * Class determines the response to unauthorized access
  */
 @Component
 public class JwtAuthenticationEntryPoint  implements AuthenticationEntryPoint {
 
-    /**
-     * Logger for error message
-     */
+    // Logger used to document error
     private static final Logger logger = LoggerFactory.getLogger(JwtAuthenticationEntryPoint.class);
 
+
     /**
-     * Respond with unauhorized message
+     * The response issued on unauthorized access
      * @param httpServletRequest
      * @param httpServletResponse
      * @param e
@@ -32,7 +31,7 @@ public class JwtAuthenticationEntryPoint  implements AuthenticationEntryPoint {
      */
     @Override
     public void commence(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, AuthenticationException e) throws IOException, ServletException {
-        logger.error("Error Message: {}",e.getMessage());
+        logger.error("Error {}",e.getMessage());
         httpServletResponse.sendError(httpServletResponse.SC_UNAUTHORIZED,e.getMessage());
     }
 }
