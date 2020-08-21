@@ -11,8 +11,11 @@ public class Photograph<T> {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long photoId;
+
     private String photoName;
+
     private String photoPath;
+
     private Boolean isActive;
 
     @JsonBackReference

@@ -22,13 +22,11 @@ CONTROL_COURSE_COURSE_ID) VALUES
 (5,4,670.01,FALSE,54.1890893,-6.0007266,'e','notee',1),
 (6,5,649.98,FALSE,54.1904247,-6.0019932,'f','notef',1),
 (7,6,671.99,FALSE,54.19117, -5.99975,'g','noteg',1),
-(8,0,635.99,FALSE,54.1900961,-5.9985057,'a','notea',2),
-(9,1,554.00,FALSE,54.187884,-5.9969286,'b','noteb',2),
-(10,2,595.00,FALSE,54.1874571,-5.9983233,'c','notec',2),
-(11,3,634.01,FALSE,54.1874571,-6.001542,'d','noted',2),
-(12,4,670.01,FALSE,54.1890893,-6.0007266,'e','notee',2),
-(13,5,649.98,FALSE,54.1904247,-6.0019932,'f','notef',2),
-(14,6,671.99,FALSE,54.19117, -5.99975,'g','noteg',2);
+(8,0,635.99,FALSE,54.368144,-5.597652,'a','notea',2),
+(9,1,635.99,FALSE,54.368188, -5.595732,'b','noteb',2),
+(10,2,635.99,FALSE,54.367125, -5.591322,'c','notec',2),
+(11,3,635.99,FALSE,54.367312, -5.587106,'d','noted',2),
+(12,4,635.99,FALSE,54.367731, -5.584317,'e','notee',2);
 
 INSERT INTO Control_Photograph (PHOTO_ID, PHOTO_NAME, PHOTO_PATH, is_active, Reference_ID) VALUES
 (1,'myphoto1','http://192.168.0.21:8080/uploads/photographs/Central-Mournes3_f.jpg',true,1),
@@ -37,12 +35,16 @@ INSERT INTO Control_Photograph (PHOTO_ID, PHOTO_NAME, PHOTO_PATH, is_active, Ref
 (4,'myphoto4','http://192.168.0.21:8080/uploads/photographs/unnamed.jpg',true,4),
 (5,'myphoto5','http://192.168.0.21:8080/uploads/photographs/mourne-mountains.jpg',true,5),
 (6,'myphoto6','http://192.168.0.21:8080/uploads/photographs/_methode_times_prod_web_bin_ccea3924-209f-11e8-a25c-0a92182647c9.jpg',true,6),
-(7,'myphoto7','http://192.168.0.21:8080/uploads/photographs/las-montanas-de-mourne.jpg',true,7);
-
+(7,'myphoto7','http://192.168.0.21:8080/uploads/photographs/las-montanas-de-mourne.jpg',true,7),
+(8,'myphoto8','http://192.168.0.21:8080/uploads/photographs/download1.jpg',true,8),
+(9,'myphoto9','http://192.168.0.21:8080/uploads/photographs/download2.jpg',true,9),
+(10,'myphoto10','http://192.168.0.21:8080/uploads/photographs/download3.jpg',true,10),
+(11,'myphoto11','http://192.168.0.21:8080/uploads/photographs/download4.jpg',true,11),
+(12,'myphoto12','http://192.168.0.21:8080/uploads/photographs/download5.jpg',true,12);
 
 INSERT INTO Event (eventid,event_created,event_date,event_name,event_note,event_status, course_id, user_id, is_active) VALUES
 (1,'2020-06-19 15:27:28.054','2020-06-19 15:27:28.054','event1','eventnote1',3,1,1,true),
-(2,'2020-06-19 15:27:28.054','2020-06-19 15:27:28.054','event2','eventnote1',2,1,1,true),
+(2,'2020-06-19 15:27:28.054','2020-06-19 15:27:28.054','event2','eventnote1',2,2,1,true),
 (3,'2020-06-19 15:27:28.054','2020-06-19 15:27:28.054','event3','eventnote1',1,1,1,true);
 
 INSERT INTO Event_Photograph (PHOTO_ID, PHOTO_NAME, PHOTO_PATH, is_active, Reference_ID) VALUES
@@ -54,7 +56,8 @@ INSERT INTO Participant (PARTICIPANT_ID,  	EVENTID,  	USER_ID  ) VALUES
 (1,1,2),
 (2,1,4),
 (3,1,3),
-(4,1,5);
+(4,1,5),
+(5,2,3);
 
 INSERT INTO Participant_Control_Performance (pcp_id, control_time, control_id, participant_id) VALUES
 (1 , 30000 , 1 , 1),

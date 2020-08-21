@@ -11,6 +11,9 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 
 @Service
 public class ImageUploadService {
@@ -30,12 +33,13 @@ public class ImageUploadService {
 
     public ImageUploadResponse uploadImage(MultipartFile file){
         String filename = StringUtils.cleanPath(file.getOriginalFilename());
-        System.out.println(filename);
+        Date now = Calendar.getInstance().getTime();
+        String timestamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(now);
         try{
-            Path copylocation = this.fileStorageLocation.resolve(filename);
+            Path copylocation = this.fileStorageLocation.resolve(filename+timestamp+".jpg");
             Files.copy(file.getInputStream(),copylocation, StandardCopyOption.REPLACE_EXISTING);
 
-            return new ImageUploadResponse(true,"http://192.168.0.21:8080/uploads/photographs/"+file.getOriginalFilename());
+            return new ImageUploadResponse(true,"http://192.168.0.21:8080/uploads/photographs/"+file.getOriginalFilename()+timestamp+".jpg");
         } catch (Exception e){
             System.out.println("Error Storing file");
             e.printStackTrace();

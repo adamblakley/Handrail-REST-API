@@ -59,10 +59,10 @@ public class EventController {
     }
 
     @GetMapping("/users/{id}/events")
-    public List<EventDTO> retrieveEventsByUser(@PathVariable Long id){
+    public ResponseEntity<StatusResponseEntity<List<EventDTO>>> retrieveEventsByUser(@PathVariable Long id){
         User user = userService.findUser(id);
-        List<Event> events = user.getEvents();
-        return events.stream().map(this::convertToDto).collect(Collectors.toList());
+        List<Event> events = eventService.findEventByOrganiser(user);
+        return new ResponseEntity( new StatusResponseEntity(true, "Events Found",events.stream().map(this::convertToDto).collect(Collectors.toList())), HttpStatus.OK);
     }
 
     @GetMapping("users/{id}/events/history")
@@ -87,6 +87,80 @@ public class EventController {
         }
     }
 
+
+    @PutMapping("events/{id}/update")
+    public ResponseEntity<StatusResponseEntity<EventDTO>> updateEventInformation(@PathVariable Integer id, @Valid @RequestBody EventDTO eventDto){
+
+        Event serverEvent = eventService.findEvent(id);
+
+        if (eventDto.getEventName()!=null){
+            serverEvent.setEventName(eventDto.getEventName());
+        }
+        if (eventDto.getEventNote()!=null){
+            serverEvent.setEventNote(eventDto.getEventNote());
+        }
+        if (eventDto.getEventDate()!=null){
+            serverEvent.setEventDate(eventDto.getEventDate());
+        }
+
+        if (serverEvent.getEventID()==eventService.saveEvent(serverEvent).getEventID()){
+            EventDTO returnedEventDto = convertToDto(serverEvent);
+            return new ResponseEntity( new StatusResponseEntity(true, "Event Update Successful",returnedEventDto), HttpStatus.OK);
+        } else {
+            return new ResponseEntity( new StatusResponseEntity(false, "Event Update Failure",false), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @PostMapping("events/{id}/update")
+    public ResponseEntity<StatusResponseEntity<EventDTO>> updateEventInformationWphoto(@PathVariable Integer id, @Valid @RequestPart("event")EventDTO eventDto, @RequestPart(value ="file", required=false) MultipartFile file){
+
+        Event serverEvent = eventService.findEvent(id);
+
+        if (eventDto.getEventName()!=null){
+            serverEvent.setEventName(eventDto.getEventName());
+        }
+        if (eventDto.getEventNote()!=null){
+            serverEvent.setEventNote(eventDto.getEventNote());
+        }
+        if (eventDto.getEventDate()!=null){
+            serverEvent.setEventDate(eventDto.getEventDate());
+        }
+
+        if (file!=null){
+            ImageUploadResponse imageUploadResponse = imageUploadService.uploadImage(file);
+
+            if (imageUploadResponse.getSuccess()){
+                EventPhotograph photograph = new EventPhotograph();
+                photograph.setPhotoName(file.getOriginalFilename());
+                photograph.setPhotoPath(imageUploadResponse.getFilepath());
+                photograph.setActive(true);
+                photograph.setEntity(serverEvent);
+
+                if (serverEvent.getEventPhotographs()==null){
+                    serverEvent.setEventPhotographs(new ArrayList<EventPhotograph>());
+                }
+
+                for (Photograph photographThru : serverEvent.getEventPhotographs()){
+                    photographThru.setActive(false);
+                }
+
+                serverEvent.getEventPhotographs().add(photograph);
+            } else {
+                eventService.saveEvent(serverEvent);
+                EventDTO returnedEventDto = convertToDto(serverEvent);
+                return new ResponseEntity( new StatusResponseEntity(true, "Event Update Partial Success. Image Update Failure",returnedEventDto), HttpStatus.PARTIAL_CONTENT);
+            }
+
+        }
+
+        if (serverEvent.getEventID()==eventService.saveEvent(serverEvent).getEventID()){
+            EventDTO returnedEventDto = convertToDto(serverEvent);
+            return new ResponseEntity( new StatusResponseEntity(true, "Event Update Successful",returnedEventDto), HttpStatus.OK);
+        } else {
+            return new ResponseEntity( new StatusResponseEntity(false, "Event Update Failure",false), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
     @PutMapping("events/{id}/updatestatus")
     public ResponseEntity<StatusResponseEntity<EventDTO>> updateEventStatus(@PathVariable Integer id){
         Event event = eventService.findEvent(id);
@@ -102,7 +176,7 @@ public class EventController {
             EventDTO eventDto = convertToDto(event);
             return new ResponseEntity( new StatusResponseEntity(true, "Event Update Successful",eventDto), HttpStatus.OK);
         } else {
-            return new ResponseEntity( new StatusResponseEntity(false, "Event Update Successful",false), HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity( new StatusResponseEntity(false, "Event Update Failure",false), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 

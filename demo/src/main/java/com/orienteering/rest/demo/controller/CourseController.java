@@ -51,7 +51,6 @@ public class CourseController {
 
     @GetMapping("/users/{id}/courses")
     public ResponseEntity<StatusResponseEntity<List<CourseDTO>>> findCoursesByUser(@PathVariable Long id){
-        System.out.println("BADBADBAD");
         User user = userService.findUser(id);
         List<Course> courses = courseService.findCoursesByUser(user);
         return new ResponseEntity( new StatusResponseEntity(true, "Course Found",courses.stream().map(this::convertToDto).collect(Collectors.toList())), HttpStatus.OK);
@@ -69,28 +68,29 @@ public class CourseController {
 
         Course course = convertToEntity(courseDto);
         course.setActive(true);
-        for (int i = 0; i<files.length; i++)
-        {
-            if (!files[i].isEmpty()){
-                System.out.println("Position not empty "+i);
-                MultipartFile file = files[i];
-                ImageUploadResponse imageUploadResponse = imageUploadService.uploadImage(file);
-                int position = 1 + i;
-                for (Control control : course.getCourseControls()){
-                    control.setControlCourse(course);
-                    if (control.getControlPosition().equals(position)){
-                        ControlPhotograph photograph = new ControlPhotograph();
-                        photograph.setPhotoPath(imageUploadResponse.getFilepath());
-                        photograph.setPhotoName(file.getOriginalFilename());
-                        photograph.setActive(true);
-                        photograph.setEntity(control);
-                        control.setControlPhotographs(new ArrayList<ControlPhotograph>());
-                        control.getControlPhotographs().add(photograph);
-                    }
+        // loop through each control, nested loop through each file. If a file name matches a control name, save the file and associate
+        for(Control control :course.getCourseControls()){
+
+            control.setControlCourse(course);
+
+            for (int i=0;i<files.length;i++){
+                System.out.println(files[i].getOriginalFilename());
+                if (files[i].getOriginalFilename().equals(control.getControlName())){
+                    // save the file and associate the filepath returned to the photopath of a ControlPhotograph object, associate this to the Control object
+                    MultipartFile file = files[i];
+                    ImageUploadResponse imageUploadResponse = imageUploadService.uploadImage(file);
+                    ControlPhotograph photograph = new ControlPhotograph();
+                    photograph.setPhotoPath(imageUploadResponse.getFilepath());
+                    photograph.setPhotoName(file.getOriginalFilename());
+                    photograph.setActive(true);
+                    photograph.setEntity(control);
+                    control.setControlPhotographs(new ArrayList<ControlPhotograph>());
+                    control.getControlPhotographs().add(photograph);
+                    break;
                 }
             }
         }
-
+        // save the Course with an associated user and timestamp of creation, convert to DTO for return to the client
         User user = userService.findUser(id);
         course.setCourseUser(user);
         course.setCourseDate(Calendar.getInstance().getTime());

@@ -58,8 +58,6 @@ public class ParticipantControlPerformanceController {
         for (Participant eventParticipant : event.getParticipants()){
             if (eventParticipant.getParticipantUser().getUserId().equals(userId)){
                 participant = eventParticipant;
-                System.out.println("participant id = "+participant.getParticipantId());
-                System.out.println("user id = "+participant.getParticipantUser().getUserId());
                 break;
             }
         }

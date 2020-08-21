@@ -29,6 +29,14 @@ public class EventService {
         return events;
     }
 
+    public List<Event> findEventByOrganiser(User user) {
+
+        List<Event> events= eventRepository.findByEventOrganiser(user);
+        List<Event> appropriateEvents = new ArrayList<Event>();
+        return events;
+    }
+
+
     public List<Event> findEventsByParticipantHistory(User user) {
 
         List<Event> events= eventRepository.findByParticipants_ParticipantUser(user);
@@ -46,6 +54,7 @@ public class EventService {
         }
         return appropriateEvents;
     }
+
     public List<Event> findActiveEvents(){return eventRepository.findByIsActiveTrue();}
 
     /* Example. To Be ued in reference and deleted

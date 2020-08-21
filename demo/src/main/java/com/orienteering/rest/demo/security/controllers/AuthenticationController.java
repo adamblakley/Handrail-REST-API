@@ -76,7 +76,7 @@ public class AuthenticationController {
         if (prinicipal instanceof UserPrincipal && checkLogin((UserPrincipal)prinicipal)){
             return new ResponseEntity(new StatusResponseEntity(true, "User logged in", true),HttpStatus.OK);
         }
-        return new ResponseEntity(new StatusResponseEntity(false, "User not logged in", false),HttpStatus.UNAUTHORIZED);
+        return new ResponseEntity(new StatusResponseEntity(false, "User not logged in", false),HttpStatus.FORBIDDEN);
     }
 
 
