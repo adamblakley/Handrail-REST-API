@@ -70,8 +70,13 @@ public class ParticipantController {
         };
 
         ArrayList<Participant> participants = new ArrayList<Participant>(event.getParticipants());
+        ArrayList<Participant> topParticipants = new ArrayList<>();
         Collections.sort(participants, participantComparator);
-        ArrayList<Participant> topParticipants = (ArrayList<Participant>)participants.subList(0,5);
+        for (int position =0; position<=4;position++){
+            if (participants.size()>position){
+                topParticipants.add(participants.get(position));
+            }
+        }
 
         return new ResponseEntity( new StatusResponseEntity(true, "Top participants found",topParticipants.stream().map(this::convertToDto).collect(Collectors.toList())), HttpStatus.OK);
 
