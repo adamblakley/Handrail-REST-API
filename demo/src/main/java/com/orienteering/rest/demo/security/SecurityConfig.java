@@ -95,6 +95,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         .permitAll()
                     .antMatchers("/error")
                         .permitAll()
+                .antMatchers("/users/**")
+                .permitAll()
                     .antMatchers("/authentication/**")
                         .permitAll()
                     .antMatchers("/h2-console/**")

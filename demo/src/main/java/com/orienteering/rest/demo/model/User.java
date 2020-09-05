@@ -9,43 +9,46 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+/**
+ * Represents a system user
+ */
 @Entity
 public class User {
-
+    // user id
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long userId;
-
+    // date user was created
     private Date userCreated;
-
+    // user email
     private String userEmail;
-
+    // user password
     private String userPassword;
-
+    // user first name
     private String userFirstName;
-
+    // user surname
     private String userLastName;
-
+    // user date of birth
     @Past
     private Date userDob;
-
+    // user biography
     private String userBio;
-
+    // user type
     private int userType;
-
+    // events associated to user as organiser
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "eventOrganiser")
     private List<Event> events;
-
+    // participant entities associated to user
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "participantUser", cascade = CascadeType.ALL)
     private List<Participant> participants;
-
+    // courses associated to user
     @OneToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL,mappedBy = "courseUser")
     private List<Course> courses;
-
+    // user photographs
     @JsonManagedReference
     @OneToMany(mappedBy = "entity", cascade = CascadeType.ALL)
     private List<UserPhotograph> userPhotographs;
-
+    // user roles
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinColumn(name = "role_id")
     private Set<Role> userRoles = new HashSet<>();

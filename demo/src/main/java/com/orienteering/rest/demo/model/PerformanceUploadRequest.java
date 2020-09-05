@@ -11,11 +11,13 @@ import java.util.List;
  * Holds participant performance upload request information
  */
 public class PerformanceUploadRequest {
-
+    // start time of event
     @NotNull
     private Long startTime;
+    // list of all performance times
     @Size(min = 1)
     private List<ParticipantControlPerformanceDTO> performances;
+    // list of all route points
     @Size(min = 1)
     private List<RoutePointDTO> routePoints;
 

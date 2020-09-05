@@ -6,32 +6,43 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import javax.persistence.*;
 import java.util.List;
 
+/**
+ * Control object represents orienteering control
+ */
 @Entity
 public class Control {
-
+    // control id
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer controlId;
+    // control position
     private Integer controlPosition;
+    // control name
     private String controlName;
+    // control note
     private String controlNote;
+    // control time
     private String controlTime;
+    // control latitude
     private Double controlLatitude;
+    // control longitude
     private Double controlLongitude;
+    // control altitude
     private Double controlAltitude;
+    // control completed check
     private boolean controlCompleted;
-
+    // course for control
     @JsonBackReference
     @ManyToOne(fetch = FetchType.EAGER)
     private Course controlCourse;
-
+    //control photographs
     @JsonManagedReference
     @OneToMany(mappedBy = "entity", cascade = CascadeType.ALL)
     private List<ControlPhotograph> controlPhotographs;
-
+    // performances for control
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "pcpControl", cascade = CascadeType.ALL)
     private List<ParticipantControlPerformance> participantControlPerformances;
-
+    // default constructor
     public Control(){
         super();
     }

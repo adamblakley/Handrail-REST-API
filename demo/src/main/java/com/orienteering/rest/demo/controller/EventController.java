@@ -23,22 +23,29 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * Controller class for Event objects
+ */
 @RestController
 public class EventController {
 
+    // service class to request objects from the repository
     @Autowired
     EventService eventService;
-
+    // service class to request objects from the repository
     @Autowired
     UserService userService;
-
+    // service class to request objects from the repository
     @Autowired
     ImageUploadService imageUploadService;
-
+    // model mapper, maps resources to DTOs
     @Autowired
     ModelMapper modelMapper;
 
-
+    /**
+     * Get all events
+     * @return
+     */
     @GetMapping("/events")
     public ResponseEntity<StatusResponseEntity<?>> retrieveAllEvents(){
         List<Event> events = eventService.findActiveEvents();
@@ -51,6 +58,11 @@ public class EventController {
 
     }
 
+    /**
+     * Get event by id
+     * @param id
+     * @return
+     */
     @GetMapping("/events/{id}")
     public ResponseEntity<StatusResponseEntity<?>> retrieveEvents(@PathVariable Integer id){
         Event event = eventService.findEvent(id);
@@ -58,6 +70,11 @@ public class EventController {
         return new ResponseEntity( new StatusResponseEntity(true, "Event Update Successful",eventDto), HttpStatus.OK);
     }
 
+    /**
+     * Get events by user
+     * @param id
+     * @return
+     */
     @GetMapping("/users/{id}/events")
     public ResponseEntity<StatusResponseEntity<List<EventDTO>>> retrieveEventsByUser(@PathVariable Long id){
         User user = userService.findUser(id);
@@ -65,6 +82,11 @@ public class EventController {
         return new ResponseEntity( new StatusResponseEntity(true, "Events Found",events.stream().map(this::convertToDto).collect(Collectors.toList())), HttpStatus.OK);
     }
 
+    /**
+     * Get events by user history
+     * @param id
+     * @return
+     */
     @GetMapping("users/{id}/events/history")
     public ResponseEntity<StatusResponseEntity<List<EventDTO>>> retrieveEventsByUserHistory(@PathVariable Long id){
         User user = userService.findUser(id);
@@ -72,9 +94,15 @@ public class EventController {
         return new ResponseEntity( new StatusResponseEntity(true, "Events Found",events.stream().map(this::convertToDto).collect(Collectors.toList())), HttpStatus.OK);
     }
 
+    /**
+     * Delete event
+     * @param id
+     * @return
+     */
     @PutMapping("/events/{id}/delete")
     public ResponseEntity<StatusResponseEntity<Boolean>> deleteEvent (@PathVariable Integer id){
         Event event = eventService.findEvent(id);
+        // if event exists, set inactive. if already inactive, return conflict
         if (event!=null){
             if (!event.isActive()){
                 return new ResponseEntity( new StatusResponseEntity(false, "Event Already Removed",false), HttpStatus.CONFLICT);
@@ -88,6 +116,12 @@ public class EventController {
     }
 
 
+    /**
+     * Update event
+     * @param id
+     * @param eventDto
+     * @return
+     */
     @PutMapping("events/{id}/update")
     public ResponseEntity<StatusResponseEntity<EventDTO>> updateEventInformation(@PathVariable Integer id, @Valid @RequestBody EventDTO eventDto){
 
@@ -111,6 +145,13 @@ public class EventController {
         }
     }
 
+    /**
+     * Update event with image update
+     * @param id
+     * @param eventDto
+     * @param file
+     * @return
+     */
     @PostMapping("events/{id}/update")
     public ResponseEntity<StatusResponseEntity<EventDTO>> updateEventInformationWphoto(@PathVariable Integer id, @Valid @RequestPart("event")EventDTO eventDto, @RequestPart(value ="file", required=false) MultipartFile file){
 
@@ -126,6 +167,7 @@ public class EventController {
             serverEvent.setEventDate(eventDto.getEventDate());
         }
 
+        // if image!=null, save image, return filepath and create new photo with filepath
         if (file!=null){
             ImageUploadResponse imageUploadResponse = imageUploadService.uploadImage(file);
 
@@ -139,11 +181,11 @@ public class EventController {
                 if (serverEvent.getEventPhotographs()==null){
                     serverEvent.setEventPhotographs(new ArrayList<EventPhotograph>());
                 }
-
+                // set all event photographs to false
                 for (Photograph photographThru : serverEvent.getEventPhotographs()){
                     photographThru.setActive(false);
                 }
-
+                // add new event photograph
                 serverEvent.getEventPhotographs().add(photograph);
             } else {
                 eventService.saveEvent(serverEvent);
@@ -152,7 +194,7 @@ public class EventController {
             }
 
         }
-
+        // save and return event
         if (serverEvent.getEventID()==eventService.saveEvent(serverEvent).getEventID()){
             EventDTO returnedEventDto = convertToDto(serverEvent);
             return new ResponseEntity( new StatusResponseEntity(true, "Event Update Successful",returnedEventDto), HttpStatus.OK);
@@ -161,9 +203,15 @@ public class EventController {
         }
     }
 
+    /**
+     * update event status
+     * @param id
+     * @return
+     */
     @PutMapping("events/{id}/updatestatus")
     public ResponseEntity<StatusResponseEntity<EventDTO>> updateEventStatus(@PathVariable Integer id){
         Event event = eventService.findEvent(id);
+        // switch for event status, change to 2 or 3 based on original status
         switch (event.getEventStatus()){
             case 1: event.setEventStatus(2);
                 break;
@@ -180,12 +228,21 @@ public class EventController {
         }
     }
 
+    /**
+     * Create a new event
+     * @param id
+     * @param eventDto
+     * @param file
+     * @return
+     */
     @Transactional
     @PostMapping("/users/{id}/events")
     @ResponseBody
     public ResponseEntity<StatusResponseEntity<EventDTO>> createEvent(@PathVariable Long id, @Valid @RequestPart("event")EventDTO eventDto, @RequestParam("file")MultipartFile file){
+        // get an upload response from the imageuload service
         ImageUploadResponse imageUploadResponse = uploadEventPhotograph(file);
 
+        // if image upload is success, then create event from DTO, set image file, set to active, set creation time and save
         if (imageUploadResponse.getSuccess()) {
             Event event = convertToEntity(eventDto);
             EventPhotograph photograph = new EventPhotograph();
@@ -209,11 +266,20 @@ public class EventController {
 
     }
 
+    /**
+     * Get image upload response from imageuploadservice.
+     * @param file
+     * @return
+     */
     public ImageUploadResponse uploadEventPhotograph(MultipartFile file){
         ImageUploadResponse imageUploadResponse = imageUploadService.uploadImage(file);
         return imageUploadResponse;
     }
 
+    /**
+     * Get user from security context holder principle
+     * @return
+     */
     public StatusResponseEntity<Object> getUser(){
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         if (principal instanceof UserPrincipal){
@@ -225,16 +291,22 @@ public class EventController {
     }
 
 
+    /**
+     * Convert EventDTO to Event
+     * @param eventDto
+     * @return
+     */
     private Event convertToEntity(EventDTO eventDto){
         return modelMapper.map(eventDto, Event.class);
     }
 
+    /**
+     * Convert Event to EventDTO
+     * @param event
+     * @return
+     */
     public EventDTO convertToDto(Event event){
         return modelMapper.map(event,EventDTO.class);
-    }
-
-    private UserDTO convertToDto(User user){
-        return modelMapper.map(user, UserDTO.class);
     }
 
 }

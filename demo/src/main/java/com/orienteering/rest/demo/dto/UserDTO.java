@@ -3,26 +3,41 @@ package com.orienteering.rest.demo.dto;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * DTO for User Object
+ */
 public class UserDTO {
-
-
+    // user id
     private Long userId;
-
+    // user email
     private String userEmail;
-
+    // user first name
     private String userFirstName;
-
+    // user surname
     private String userLastName;
-
+    // user date of birth
     private Date userDob;
-
+    // user biography
     private String userBio;
-
+    // user photographs
     private List<PhotographDTO> userPhotographs;
 
+    /**
+     * Default constructor
+     */
     public UserDTO() {
     }
 
+    /**
+     * Constructor with args
+     * @param userId
+     * @param userEmail
+     * @param userFirstName
+     * @param userLastName
+     * @param userDob
+     * @param userBio
+     * @param userPhotographs
+     */
     public UserDTO(Long userId, String userEmail, String userFirstName, String userLastName, Date userDob, String userBio, List<PhotographDTO> userPhotographs) {
         this.userId = userId;
         this.userEmail = userEmail;

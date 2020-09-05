@@ -1,11 +1,21 @@
 package com.orienteering.rest.demo.dto;
-public class RoutePointDTO {
 
+/**
+ * DTO For RoutePoint Object
+ */
+public class RoutePointDTO {
+    // Route Point ID
     private Integer routePointId;
+    // Route Point Position
     private Integer routePointPosition;
+    // Route Point Latitude
     private Double routePointLatitude;
+    // Route Point Longitude
     private Double routePointLongitude;
 
+    /**
+     * Default Constructor
+     */
     public RoutePointDTO() {
         super();
     }

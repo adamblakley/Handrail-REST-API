@@ -5,38 +5,47 @@ import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * Event represents an orienteering event
+ */
 @Entity
 public class Event {
-
+    // event id
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer eventID;
+    // event name
     private String eventName;
+    // date created
     private Date eventCreated;
-
+    // event date time
     private Date eventDate;
-
+    // event note
     private String eventNote;
+    // event active status
     private Integer eventStatus;
-
+    // event course
     @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name = "course_id")
     private Course eventCourse;
-
+    // event organiser
     @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name="user_id")
     private User eventOrganiser;
-
+    // list of participants
     @JsonManagedReference
     @OneToMany(mappedBy = "participantEvent", cascade = CascadeType.PERSIST)
     private List<Participant> participants;
-
+    // list of photographs for event
     @JsonManagedReference
     @OneToMany(mappedBy = "entity", cascade = CascadeType.ALL)
     private List<EventPhotograph> eventPhotographs;
-
+    // is event active
     private boolean isActive;
 
+    /**
+     * Default constructor
+     */
     public Event() {
         super();
     }

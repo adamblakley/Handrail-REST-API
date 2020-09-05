@@ -11,17 +11,23 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
-
+/**
+ * Service queries repository for Event objects
+ */
 @Service
 public class EventService {
 
     public EventService() {
     }
-
+    // Repository to request database queries
     @Autowired
     EventRepository eventRepository;
 
 
+    /**
+     * Find all events
+     * @return
+     */
     @Transactional(readOnly = true)
     public List<Event> findAllEvents(){
         List<Event> events = new ArrayList<>();
@@ -29,14 +35,22 @@ public class EventService {
         return events;
     }
 
+    /**
+     * Find event by organiser
+     * @param user
+     * @return
+     */
     public List<Event> findEventByOrganiser(User user) {
-
-        List<Event> events= eventRepository.findByEventOrganiser(user);
-        List<Event> appropriateEvents = new ArrayList<Event>();
+        List<Event> events= eventRepository.findByEventOrganiserAndIsActiveTrue(user);
         return events;
     }
 
 
+    /**
+     * Find event by participant
+     * @param user
+     * @return
+     */
     public List<Event> findEventsByParticipantHistory(User user) {
 
         List<Event> events= eventRepository.findByParticipants_ParticipantUser(user);
@@ -55,6 +69,10 @@ public class EventService {
         return appropriateEvents;
     }
 
+    /**
+     * Find active events
+     * @return
+     */
     public List<Event> findActiveEvents(){return eventRepository.findByIsActiveTrue();}
 
     /* Example. To Be ued in reference and deleted
@@ -70,15 +88,30 @@ public class EventService {
     }
     */
 
+    /**
+     * Save event
+     * @param event
+     * @return
+     */
     public Event saveEvent(Event event){
         return eventRepository.save(event);
     }
 
+    /**
+     * Find event by id
+     * @param id
+     * @return
+     */
     @Transactional(readOnly = true)
     public Event findEvent(Integer id){
         return eventRepository.findById(id).get();
     }
 
+    /**
+     * Delete event
+     * @param id
+     * @return
+     */
     public Boolean deleteEvent(Integer id) {
         if (eventRepository.existsById(id)) {
             eventRepository.deleteById(id);

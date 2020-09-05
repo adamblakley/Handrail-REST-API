@@ -1,13 +1,25 @@
 package com.orienteering.rest.demo.model;
 
+/**
+ * REST response on image save
+ */
 public class ImageUploadResponse {
-
+    // was save successful
     private Boolean success;
+    // filepath of saved image
     private String filepath;
 
+    /**
+     * Default constructor
+     */
     public ImageUploadResponse() {
     }
 
+    /**
+     * Constructor with args
+     * @param success
+     * @param filepath
+     */
     public ImageUploadResponse(Boolean success, String filepath) {
         this.success = success;
         this.filepath = filepath;

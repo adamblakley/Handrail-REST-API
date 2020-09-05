@@ -4,20 +4,25 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import javax.persistence.*;
 
+/**
+ * Super class represents a photograph
+ * @param <T>
+ */
 @MappedSuperclass
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public class Photograph<T> {
 
+    // id
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long photoId;
-
+    // Name of photo
     private String photoName;
-
+    // Photo filepath
     private String photoPath;
-
+    // is photograph the active photograph
     private Boolean isActive;
-
+    // related entity, delcared in child
     @JsonBackReference
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "referenceId")

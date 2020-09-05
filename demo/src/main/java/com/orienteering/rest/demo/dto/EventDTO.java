@@ -3,19 +3,34 @@ package com.orienteering.rest.demo.dto;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * DTO for Event Object
+ */
 public class EventDTO {
-
+    // event id
     private Integer eventId;
+    // event name
     private String eventName;
+    // date created
     private Date eventCreated;
+    // event organiser
     private UserDTO eventOrganiser;
+    // event date time
     private Date eventDate;
+    // event note
     private String eventNote;
+    // event active status
     private Integer eventStatus;
+    // event course
     private CourseDTO eventCourse;
+    // event participants
     private List<ParticipantDTO> participants;
+    // event photographs
     private List<PhotographDTO> eventPhotographs;
 
+    /**
+     * Default constructor
+     */
     public EventDTO() {
         super();
     }

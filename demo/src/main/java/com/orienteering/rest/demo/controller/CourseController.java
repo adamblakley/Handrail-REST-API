@@ -13,26 +13,33 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-
 import javax.validation.Valid;
 import java.util.*;
 import java.util.stream.Collectors;
 
+/**
+ * Controller class for Course objects
+ */
 @RestController
 public class CourseController {
 
+    // service class to request objects from the repository
     @Autowired
     CourseService courseService;
-
+    // service class to request objects from the repository
     @Autowired
     UserService userService;
-
+    // service class to request objects from the repository
     @Autowired
     ImageUploadService imageUploadService;
-
+    // model mapper, maps resources to DTOs
     @Autowired
     ModelMapper modelMapper;
 
+    /**
+     * List all courses
+     * @return
+     */
     @GetMapping("/courses")
     public List<CourseDTO> retrieveAllCourses(){
 
@@ -40,7 +47,11 @@ public class CourseController {
         return courses.stream().map(this::convertToDto).collect(Collectors.toList());
     }
 
-
+    /**
+     * List course by id
+     * @param id
+     * @return
+     */
     @GetMapping("/courses/{id}")
     public ResponseEntity<StatusResponseEntity<CourseDTO>> retrieveCourseById(@PathVariable Integer id){
         Course course = courseService.findCourse(id);
@@ -49,6 +60,11 @@ public class CourseController {
 
     }
 
+    /**
+     * Get courses by user
+     * @param id
+     * @return
+     */
     @GetMapping("/users/{id}/courses")
     public ResponseEntity<StatusResponseEntity<List<CourseDTO>>> findCoursesByUser(@PathVariable Long id){
         User user = userService.findUser(id);
@@ -56,15 +72,16 @@ public class CourseController {
         return new ResponseEntity( new StatusResponseEntity(true, "Course Found",courses.stream().map(this::convertToDto).collect(Collectors.toList())), HttpStatus.OK);
     }
 
-    @PostMapping("/courses")
-    public Integer createCourses(@Valid @RequestBody Course course){
-        courseService.saveCourse(course);
-        return course.getCourseId();
-    }
-
+    /**
+     * Create a course by user id
+     * @param id
+     * @param courseDto
+     * @param files
+     * @return
+     */
     @PostMapping("/users/{id}/courses/upload")
     @ResponseBody
-    public ResponseEntity<StatusResponseEntity<Course>> createCourses1(@PathVariable Long id,@Valid @RequestPart("course") CourseDTO courseDto, @RequestPart("file") MultipartFile[] files){
+    public ResponseEntity<StatusResponseEntity<Course>> createCourses(@PathVariable Long id,@Valid @RequestPart("course") CourseDTO courseDto, @RequestPart("file") MultipartFile[] files){
 
         Course course = convertToEntity(courseDto);
         course.setActive(true);
@@ -104,6 +121,11 @@ public class CourseController {
         return imageUploadResponse;
     }
 
+    /**
+     * Get all courses by user
+     * @param id
+     * @return
+     */
     @GetMapping("user/courses")
     public List<CourseDTO> retrieveCoursesByUser(@PathVariable Long id){
         User user = userService.findUser(id);
@@ -111,6 +133,10 @@ public class CourseController {
         return courses.stream().map(this::convertToDto).collect(Collectors.toList());
     }
 
+    /**
+     * Get user from securitycontextholder principle
+     * @return
+     */
     public StatusResponseEntity<Object> getUser(){
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         if (principal instanceof UserPrincipal){
@@ -121,9 +147,16 @@ public class CourseController {
         }
     }
 
+    /**
+     * Delete a course
+     * @param id
+     * @return
+     */
     @PutMapping("courses/{id}/delete")
     public ResponseEntity<StatusResponseEntity<Boolean>> deleteCourse(@PathVariable int id){
+        // find course by id
         Course course = courseService.findCourse(id);
+        // if course found and is already deleted, return conflict else set to inactive and save
         if (course!=null){
             if (!course.isActive()){
                 return new ResponseEntity( new StatusResponseEntity(false, "Course Already Removed",false), HttpStatus.CONFLICT);
@@ -136,11 +169,21 @@ public class CourseController {
         }
     }
 
+    /**
+     * Convert Course to CourseDTO
+     * @param course
+     * @return
+     */
     private CourseDTO convertToDto(Course course){
         CourseDTO courseDto = modelMapper.map(course,CourseDTO.class);
         return courseDto;
     }
 
+    /**
+     * Convert CourseDTO to Course
+     * @param courseDTO
+     * @return
+     */
     private Course convertToEntity(CourseDTO courseDTO){
         return modelMapper.map(courseDTO, Course.class);
     }

@@ -7,7 +7,9 @@ import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
-
+/**
+ *Repository for Role objects
+ */
 @Repository
 public interface RoleRepository extends JpaRepository<Role,Integer> {
     Optional<Role> findByRole(ERole eRole);

@@ -3,19 +3,26 @@ package com.orienteering.rest.demo.dto;
 
 import java.util.Date;
 import java.util.List;
-
+/**
+ * DTO for Course Object
+ */
 public class CourseDTO {
-
+    // course id
     private Integer courseId;
-
+    // course name
     private String courseName;
-
+    //course note
+    private String courseNote;
+    // course creation date
     private Date courseDate;
-
+    // course controls
     private List<ControlDTO> courseControls;
-
+    // course creator
     private UserDTO user;
 
+    /**
+     * Default constructor
+     */
     public CourseDTO(){ }
 
     public Integer getCourseId() {
@@ -33,6 +40,10 @@ public class CourseDTO {
     public void setCourseName(String courseName) {
         this.courseName = courseName;
     }
+
+    public String getCourseNote() { return courseNote; }
+
+    public void setCourseNote(String courseNote) { this.courseNote = courseNote; }
 
     public Date getCourseDate() {
         return courseDate;
@@ -63,6 +74,7 @@ public class CourseDTO {
         return "CourseDTO{" +
                 "courseId=" + courseId +
                 ", courseName='" + courseName + '\'' +
+                ", courseNote='" + courseNote + '\'' +
                 ", courseDate=" + courseDate +
                 ", courseControls=" + courseControls +
                 ", user=" + user +

@@ -11,7 +11,7 @@ public class PhotographDTO {
     private String photoName;
     // Photo filepath
     private String photoPath;
-    //
+    // is photograph the active photograph
     private Boolean isActive;
 
     @Override

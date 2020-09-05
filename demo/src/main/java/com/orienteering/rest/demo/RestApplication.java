@@ -7,14 +7,20 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.support.ResourceBundleMessageSource;
 
+/**
+ * Main class
+ */
 @SpringBootApplication
 @EnableConfigurationProperties(ImageUploadProperties.class)
 public class RestApplication {
 
+	/**
+	 * Run application
+	 * @param args
+	 */
 	public static void main(String[] args) {
 		SpringApplication.run(RestApplication.class, args);
 	}
-
 
 	@Bean
 	public ResourceBundleMessageSource messageSource() {

@@ -13,23 +13,29 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+/**
+ * Controller class for ImageUpload requests
+ */
 @Controller
 public class ImageUploadController {
-
+    // service class to request objects from the repository
     @Autowired
     ImageUploadService imageUploadService;
-
+    // service class to request objects from the repository
     @Autowired
     EventPhotographService eventPhotographService;
-
-    @Autowired
 
     @GetMapping("/")
     public String index(){
         return "upload";
     }
 
-
+    /**
+     * Post image file, saving and returning response
+     * @param file
+     * @param redirectAttributes
+     * @return
+     */
     @PostMapping("/uploadeventimage")
     public ResponseEntity<StatusResponseEntity<Boolean>> uploadImage(@RequestParam("file")MultipartFile file, RedirectAttributes redirectAttributes){
 

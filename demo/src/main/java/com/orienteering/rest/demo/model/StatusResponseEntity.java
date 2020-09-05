@@ -1,14 +1,29 @@
 package com.orienteering.rest.demo.model;
 
+/**
+ * Status response entity provides response entity and message to client
+ * @param <T>
+ */
 public class StatusResponseEntity<T> {
-
+    // was request sucessful
     Boolean status;
+    // message for client
     String message;
+    // entity returned
     T entity;
 
+    /**
+     * Default constuctor
+     */
     public StatusResponseEntity() {
     }
 
+    /**
+     * Constructor with args
+     * @param status
+     * @param message
+     * @param entity
+     */
     public StatusResponseEntity(Boolean status, String message, T entity) {
         this.status = status;
         this.message = message;

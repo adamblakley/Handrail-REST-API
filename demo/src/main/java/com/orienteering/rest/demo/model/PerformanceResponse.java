@@ -10,14 +10,25 @@ import java.util.List;
  * Performance Response holds all performance information to be consumed in client performance record
  */
 public class PerformanceResponse {
-
+    // controls related to performance
     List<ControlDTO> controls;
+    // PCPs related to event performance
     List<ParticipantControlPerformanceDTO> performances;
+    // participant route points
     List<RoutePointDTO> routePoints;
 
+    /**
+     * Default constuctor
+     */
     public PerformanceResponse() {
     }
 
+    /**
+     * Constructor with args
+     * @param controls
+     * @param performances
+     * @param routePoints
+     */
     public PerformanceResponse(List<ControlDTO> controls, List<ParticipantControlPerformanceDTO> performances, List<RoutePointDTO> routePoints) {
         this.controls = controls;
         this.performances = performances;
