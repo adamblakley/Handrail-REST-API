@@ -23,7 +23,7 @@ public class WebMVCConfig implements WebMvcConfigurer {
                 .maxAge(MAXIMUM_TIME_SECONDS);
     }
 
-    // Add resource handlers for the upload of files to the correct filepath.
+    // Add resource handlers for the upload of files to the correct filepath of local machine.
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/uploads/photographs/**").addResourceLocations("file:uploads/photographs/");

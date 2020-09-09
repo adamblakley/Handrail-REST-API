@@ -169,7 +169,7 @@ public class EventController {
 
         // if image!=null, save image, return filepath and create new photo with filepath
         if (file!=null){
-            ImageUploadResponse imageUploadResponse = imageUploadService.uploadImage(file);
+            ImageUploadResponse imageUploadResponse = imageUploadService.uploadFileRequest(file);
 
             if (imageUploadResponse.getSuccess()){
                 EventPhotograph photograph = new EventPhotograph();
@@ -272,7 +272,7 @@ public class EventController {
      * @return
      */
     public ImageUploadResponse uploadEventPhotograph(MultipartFile file){
-        ImageUploadResponse imageUploadResponse = imageUploadService.uploadImage(file);
+        ImageUploadResponse imageUploadResponse = imageUploadService.uploadFileRequest(file);
         return imageUploadResponse;
     }
 

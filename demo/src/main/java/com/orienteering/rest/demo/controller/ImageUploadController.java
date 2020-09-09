@@ -39,7 +39,7 @@ public class ImageUploadController {
     @PostMapping("/uploadeventimage")
     public ResponseEntity<StatusResponseEntity<Boolean>> uploadImage(@RequestParam("file")MultipartFile file, RedirectAttributes redirectAttributes){
 
-        ImageUploadResponse imageUploadResponse = imageUploadService.uploadImage(file);
+        ImageUploadResponse imageUploadResponse = imageUploadService.uploadFileRequest(file);
 
         if(imageUploadResponse.getSuccess()){
             EventPhotograph eventPhotograph = new EventPhotograph();

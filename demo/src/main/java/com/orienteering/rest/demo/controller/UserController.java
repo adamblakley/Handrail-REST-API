@@ -19,8 +19,7 @@ import com.orienteering.rest.demo.service.UserService;
 
 import javax.validation.Valid;
 import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
+
 /**
  * Controller class for User objects
  */
@@ -145,7 +144,7 @@ public class UserController {
 
         // upload image and return response, create photograph object, associate user and returned filepath
         if (file != null) {
-            ImageUploadResponse imageUploadResponse = imageUploadService.uploadImage(file);
+            ImageUploadResponse imageUploadResponse = imageUploadService.uploadFileRequest(file);
 
             if (imageUploadResponse.getSuccess()) {
                 UserPhotograph photograph = new UserPhotograph();

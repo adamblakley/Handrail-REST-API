@@ -95,7 +95,7 @@ public class CourseController {
                 if (files[i].getOriginalFilename().equals(control.getControlName())){
                     // save the file and associate the filepath returned to the photopath of a ControlPhotograph object, associate this to the Control object
                     MultipartFile file = files[i];
-                    ImageUploadResponse imageUploadResponse = imageUploadService.uploadImage(file);
+                    ImageUploadResponse imageUploadResponse = imageUploadService.uploadFileRequest(file);
                     ControlPhotograph photograph = new ControlPhotograph();
                     photograph.setPhotoPath(imageUploadResponse.getFilepath());
                     photograph.setPhotoName(file.getOriginalFilename());
@@ -117,7 +117,7 @@ public class CourseController {
     }
 
     public ImageUploadResponse uploadControlPhotograph(MultipartFile file){
-        ImageUploadResponse imageUploadResponse = imageUploadService.uploadImage(file);
+        ImageUploadResponse imageUploadResponse = imageUploadService.uploadFileRequest(file);
         return imageUploadResponse;
     }
 
