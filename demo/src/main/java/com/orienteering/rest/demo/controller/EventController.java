@@ -76,8 +76,11 @@ public class EventController {
      * @return
      */
     @GetMapping("/users/{id}/events")
-    public ResponseEntity<StatusResponseEntity<List<EventDTO>>> retrieveEventsByUser(@PathVariable Long id){
+    public ResponseEntity<StatusResponseEntity<?>> retrieveEventsByUser(@PathVariable Long id){
         User user = userService.findUser(id);
+        if (user.getUserType() == 1) {
+            return new ResponseEntity(new StatusResponseEntity(false, "Admin Access", false), HttpStatus.FORBIDDEN);
+        }
         List<Event> events = eventService.findEventByOrganiser(user);
         return new ResponseEntity( new StatusResponseEntity(true, "Events Found",events.stream().map(this::convertToDto).collect(Collectors.toList())), HttpStatus.OK);
     }

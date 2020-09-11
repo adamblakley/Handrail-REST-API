@@ -62,7 +62,6 @@ public class AuthenticationController {
         Object obj = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         UserPrincipal user = (UserPrincipal) obj;
         return  new ResponseEntity( new StatusResponseEntity(true, "User login successful",new JwtAuthenticationResponse(jwt,user.getId())),HttpStatus.OK);
-
     }
 
     /**
@@ -76,9 +75,27 @@ public class AuthenticationController {
         if (prinicipal instanceof UserPrincipal && checkLogin((UserPrincipal)prinicipal)){
             return new ResponseEntity(new StatusResponseEntity(true, "User logged in", true),HttpStatus.OK);
         }
-        return new ResponseEntity(new StatusResponseEntity(false, "User not logged in", false),HttpStatus.FORBIDDEN);
+        return new ResponseEntity(new StatusResponseEntity(false, "User not logged in", false),HttpStatus.UNAUTHORIZED);
     }
 
+
+    /**
+     * Check if the user is logged in
+     * @param httpServletRequest
+     * @return
+     */
+    @GetMapping("/usertype")
+    public ResponseEntity<StatusResponseEntity<Boolean>> typeUser(HttpServletRequest httpServletRequest){
+        Object prinicipal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (prinicipal instanceof UserPrincipal && checkLogin((UserPrincipal)prinicipal)){
+            User user = userService.findUser(((UserPrincipal) prinicipal).getId());
+            if (user.getUserType()==2){
+                return new ResponseEntity(new StatusResponseEntity(false, "Admin Access", true),HttpStatus.OK);
+            }
+            return new ResponseEntity(new StatusResponseEntity(true, "User Access", false),HttpStatus.OK);
+        }
+        return new ResponseEntity(new StatusResponseEntity(false, "User Not Logged In", true),HttpStatus.UNAUTHORIZED);
+    }
 
     /**
      * Returns Boolean of current login userprincipal
@@ -92,7 +109,6 @@ public class AuthenticationController {
         else return false;
     }
 
-
     /**
      * Signup request returns negative response if exists, creates new user otherwise, returns positive response
      * @param signUpRequest
@@ -104,6 +120,7 @@ public class AuthenticationController {
             return new ResponseEntity(new StatusResponseEntity(false, "User Email already exists", false), HttpStatus.CONFLICT);
         } else {
             User user = new User(signUpRequest.getFirstName(),signUpRequest.getLastName(),signUpRequest.getEmail(),signUpRequest.getPassword(),signUpRequest.getUserDob(),signUpRequest.getUserBio());
+            user.setUserType(1);
             user.setUserPassword(passwordEncoder.encode(user.getUserPassword()));
             Role role = roleRepository.findByRole(ERole.ROLE_USER).orElseThrow(()->new InternalServerException("Role not set"));
             user.setUserRoles(Collections.singleton(role));

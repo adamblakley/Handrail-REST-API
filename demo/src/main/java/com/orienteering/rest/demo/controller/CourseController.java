@@ -66,8 +66,11 @@ public class CourseController {
      * @return
      */
     @GetMapping("/users/{id}/courses")
-    public ResponseEntity<StatusResponseEntity<List<CourseDTO>>> findCoursesByUser(@PathVariable Long id){
+    public ResponseEntity<StatusResponseEntity<?>> findCoursesByUser(@PathVariable Long id){
         User user = userService.findUser(id);
+        if (user.getUserType() == 1) {
+            return new ResponseEntity(new StatusResponseEntity(false, "Admin Access", false), HttpStatus.FORBIDDEN);
+        }
         List<Course> courses = courseService.findCoursesByUser(user);
         return new ResponseEntity( new StatusResponseEntity(true, "Course Found",courses.stream().map(this::convertToDto).collect(Collectors.toList())), HttpStatus.OK);
     }
