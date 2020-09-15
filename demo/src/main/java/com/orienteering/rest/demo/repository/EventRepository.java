@@ -22,6 +22,13 @@ public interface EventRepository extends JpaRepository<Event,Integer> {
     public List<Event> findByIsActiveTrue();
 
     /**
+     * Query Events by active status
+     * @return
+     */
+    @Query
+    public List<Event> findByIsActiveTrueOrderByEventDateDesc();
+
+    /**
      * Query Events by participant user
      * @param user
      * @return

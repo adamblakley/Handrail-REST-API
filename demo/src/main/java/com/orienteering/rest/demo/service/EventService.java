@@ -73,7 +73,9 @@ public class EventService {
      * Find active events
      * @return
      */
-    public List<Event> findActiveEvents(){return eventRepository.findByIsActiveTrue();}
+    public List<Event> findActiveEvents(){
+        return eventRepository.findByIsActiveTrueOrderByEventDateDesc();
+    }
 
     /* Example. To Be ued in reference and deleted
     @Transactional(readOnly = true)
