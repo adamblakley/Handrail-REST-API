@@ -71,16 +71,16 @@ INSERT INTO Control_Photograph (PHOTO_ID, PHOTO_NAME, PHOTO_PATH, is_active, Ref
 
 INSERT INTO Event (eventid,event_created,event_date,event_name,event_note,event_status, course_id, user_id, is_active) VALUES
 (1,'2020-06-19 15:27:28.054','2020-06-19 15:27:28.054','event1','eventnote1',3,1,1,true),
-(2,'2020-06-19 15:27:28.054','2020-06-19 15:27:28.054','event2','eventnote1',2,2,1,true),
-(3,'2020-06-19 15:27:28.054','2020-06-19 15:27:28.054','event3','eventnote1',1,1,1,true),
-(4,'2020-11-19 15:27:28.054','2020-06-19 15:27:28.054','EventTestOne','EventTestNote',1,4,1,true),
-(5,'2020-11-19 15:27:28.054','2020-06-19 15:27:28.054','EventTestTwo','EventTestNote',2,4,1,true),
-(6,'2020-11-19 15:27:28.054','2020-06-19 15:27:28.054','EventTestThree','EventTestNote',3,3,1,true),
-(7,'2020-11-19 15:27:28.054','2020-06-19 15:27:28.054','EventTestFive','EventTestNote',2,3,1,true),
-(8,'2020-11-19 15:27:28.054','2020-06-19 15:27:28.054','EventTestSix','EventTestNote',3,3,1,true),
-(9,'2020-11-19 15:27:28.054','2020-06-19 15:27:28.054','EventTestSeven','EventTestNote',1,1,1,true),
-(10,'2020-11-19 15:27:28.054','2020-06-19 15:27:28.054','EventTestEight','EventTestNote',2,4,1,true),
-(11,'2020-11-19 15:27:28.054','2020-06-19 15:27:28.054','EventTestNine','EventTestNote',3,1,1,true);
+(2,'2020-06-19 15:27:28.054','2020-07-19 15:27:28.054','event2','eventnote1',2,2,1,true),
+(3,'2020-06-19 15:27:28.054','2020-09-19 15:27:28.054','event3','eventnote1',1,1,1,true),
+(4,'2020-11-19 15:27:28.054','2020-08-19 15:27:28.054','EventTestOne','EventTestNote',1,4,1,true),
+(5,'2020-11-19 15:27:28.054','2020-10-19 15:27:28.054','EventTestTwo','EventTestNote',2,4,1,true),
+(6,'2020-11-19 15:27:28.054','2020-12-19 15:27:28.054','EventTestThree','EventTestNote',3,3,1,true),
+(7,'2020-11-19 15:27:28.054','2020-11-19 15:27:28.054','EventTestFive','EventTestNote',2,3,1,true),
+(8,'2020-11-19 15:27:28.054','2020-12-17 15:27:28.054','EventTestSix','EventTestNote',3,3,1,true),
+(9,'2020-11-19 15:27:28.054','2020-12-18 15:27:28.054','EventTestSeven','EventTestNote',1,1,1,true),
+(10,'2020-11-19 15:27:28.054','2020-12-20 15:27:28.054','EventTestEight','EventTestNote',2,4,1,true),
+(11,'2020-11-19 15:27:28.054','2020-12-21 15:27:28.054','EventTestNine','EventTestNote',3,1,1,true);
 
 INSERT INTO Event_Photograph (PHOTO_ID, PHOTO_NAME, PHOTO_PATH, is_active, Reference_ID) VALUES
 (1,'myphoto1','http://192.168.0.21:8080/uploads/photographs/download16.jpg',true,1),

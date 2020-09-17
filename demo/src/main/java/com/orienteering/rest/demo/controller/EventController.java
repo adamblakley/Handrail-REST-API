@@ -52,7 +52,6 @@ public class EventController {
         if (events.isEmpty()){
             return new ResponseEntity( new StatusResponseEntity(false, "No Events Available",false), HttpStatus.NOT_FOUND);
         } else {
-            events.sort(Comparator.comparing(Event::getEventDate));
             return new ResponseEntity( new StatusResponseEntity(true, "Events Found",events.stream().map(this::convertToDto).collect(Collectors.toList())), HttpStatus.OK);
         }
 

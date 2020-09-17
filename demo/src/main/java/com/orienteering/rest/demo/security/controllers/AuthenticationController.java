@@ -94,7 +94,7 @@ public class AuthenticationController {
             }
             return new ResponseEntity(new StatusResponseEntity(true, "User Access", false),HttpStatus.OK);
         }
-        return new ResponseEntity(new StatusResponseEntity(false, "User Not Logged In", true),HttpStatus.UNAUTHORIZED);
+        return new ResponseEntity(new StatusResponseEntity(false, "User Not Logged In", true),HttpStatus.FORBIDDEN);
     }
 
     /**
